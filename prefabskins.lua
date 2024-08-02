@@ -156,6 +156,7 @@ PREFAB_SKINS = {
 	},
 	bedroll_furry =
 	{
+		"bedroll_furry_catcoon",
 		"bedroll_furry_potato",
 		"bedroll_furry_quilt_blue_frost",
 		"bedroll_furry_quilt_green_hunters",
@@ -1010,6 +1011,9 @@ PREFAB_SKINS = {
 		"pottedfern_cotl",
 		"pottedfern_cotl2",
 		"pottedfern_cotl3",
+		"pottedfern_rose",
+		"pottedfern_rose2",
+		"pottedfern_rose3",
 	},
 	premiumwateringcan =
 	{
@@ -1257,6 +1261,7 @@ PREFAB_SKINS = {
 		"tent_ancient",
 		"tent_beach",
 		"tent_circus",
+		"tent_kid",
 		"tent_leaf",
 	},
 	tophat =
@@ -1341,6 +1346,10 @@ PREFAB_SKINS = {
 		"treasurechest_upgraded_traveltrunk",
 		"treasurechest_upgraded_vintage",
 		"treasurechest_vintage",
+	},
+	trident =
+	{
+		"trident_merm",
 	},
 	trophyscale_fish =
 	{

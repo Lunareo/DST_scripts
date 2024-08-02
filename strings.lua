@@ -44,7 +44,7 @@ To add a new language:
 
 STRINGS =
 {
-	PSN = "PlayStation\226\132\162Network",
+	PSN = "PlayStation™Network",
 
     CHARACTER_NAMES =
     {
@@ -7933,7 +7933,7 @@ STRINGS.UI =
         SCRIPTERROR_DEBUG = "Debug Console",
         SCRIPTERRORMODWARNING = "This error may have occurred due to a mod you have enabled!\nYou have the following mods enabled:\n",
         TESTING = "This is the testing branch!",
-        TESTINGDETAIL = "You may encounter bugs or broken features, and you may lose your save game when we update. Please report all problems in the forum.",
+        TESTINGDETAIL = "You may encounter bugs or broken features, and you may lose your saved game when we update. Please report all problems in the forum.",
         TESTINGNO = "No, thank you!",
         TESTINGYES = "I understand.",
         CONTINUE = "Continue",
@@ -8840,7 +8840,7 @@ STRINGS.UI =
         EULA = "Review the EULA",
         EULA_RESPONSE_CHANGED_TITLE = "Login Required",
         EULA_RESPONSE_CHANGED_BODY = "Your settings have changed and you must log in again to continue.",
-		PS4_SAVES = "Use PlayStation®4 save data",
+		PS4_SAVES = "Use PlayStation®4 system saved data",
 		BUGREPORT = "Submit a Bug Report",
         DYNAMICCONTENT_ENABLE = "Re-enable Dynamic Content",
         OFFLINE_MODE_TITLE = "Offline Mode",
@@ -8887,8 +8887,8 @@ STRINGS.UI =
 
             -- Settings
             INPUT = "Controller or Keyboard? Play Don't Starve Together your way.",
-            VIBRATION = "Make your controller rumble at key gameplay moments.",
-			VIBRATION_WIRELESS = "Make your wireless controller rumble at key gameplay moments.",
+            VIBRATION = "Make your controller vibrate at key gameplay moments.",
+			VIBRATION_WIRELESS = "Make your wireless controller vibrate at key gameplay moments.",
             FX = "Change how loud things are in the world.",
             MUSIC = "Tone up or down the musical fanfare in your adventures.",
             AMBIENT = "The environment makes noise too, luckily you can control how loudly it does.",
@@ -10144,8 +10144,8 @@ STRINGS.UI =
 
     CROSS_SAVE_DIALOG =
     {
-        TITLE = "Import save data?",
-        BODY = "PlayStation®4 save data has been found. Do you want to import it?",
+        TITLE = "Import saved data?",
+        BODY = "PlayStation®4 system saved data has been found. Do you want to import it?",
 
         YES = "Yes",
         NO = "No",
@@ -10153,8 +10153,8 @@ STRINGS.UI =
 
     CROSS_SAVE_DIALOG_CONFIRM =
     {
-        TITLE = "Overwrite save data?",
-        BODY = "Importing will overwrite any existing save data. Are you sure?",
+        TITLE = "Overwrite saved data?",
+        BODY = "Importing will overwrite any existing saved data. Are you sure?",
 
         YES = "Yes",
         NO = "No",
@@ -10431,6 +10431,7 @@ STRINGS.UI =
         NEWGAME = "New World",
         NEWGAME_SUFFIX = "'s World", --legacy for mods
         NEWGAME_FMT = "{name}'s World",
+        NEWGAME_GENERIC = "My World",
         CREATENEWGAME = "Create New World",
         DELETE = "Delete",
         CLONE = "Duplicate World",
@@ -10490,8 +10491,8 @@ STRINGS.UI =
         SORT_MOSTDAYS = "Days Played",
         SORT_DATECREATED = "Date Created",
         SEARCH = "Search",
-        SAVEFROMNEWERVERSION = "Not playable - save data from newer game version",
-		NO_MATCHING_SERVERS = "No save games match your search.",
+        SAVEFROMNEWERVERSION = "Not playable - saved data from newer game version",
+		NO_MATCHING_SERVERS = "No saved games match your search.",
         USECAVES_TITLE = "{server} or no {server}?",
         USECAVES_DESC_CAVE = "Play with {server}, requires more PC Power as it runs multiple servers",
         USECAVES_DESC_NOCAVE = "Play with no {server}, sad, but not as demanding on a computer",
@@ -12655,9 +12656,9 @@ STRINGS.UI =
             [9] = "Unknown",
             [10] = "Switch Controller",
             [11] = "Steam Deck",
-            [12] = "DualSense",
-            [13] = "Switch Controller (left)",
-            [14] = "Switch Controller (right)",
+            [12] = "DualSense™ wireless controller",
+            [13] = "Joy-Con™ (L)",
+            [14] = "Joy-Con™ (R)",
         },
 
         INPUTS =
@@ -13581,7 +13582,7 @@ STRINGS.UI =
         SAVE_FAILED = "An error occurred while saving your data.",
         LOAD_FAILED = "An error occurred while loading your data.",
         DELETE_FAILED = "An error occurred while deleting your data.",
-        DATA_DAMAGED = "Oh no! Your save data has become corrupt and cannot be used.",
+        DATA_DAMAGED = "Oh no! Your saved data has become corrupt and cannot be used.",
         DISABLE_AUTOSAVE = "Are you sure you want to\ndisable the auto-save feature?",
 
         OVERWRITE = "Overwrite",
@@ -13590,15 +13591,15 @@ STRINGS.UI =
         YES = "Yes",
         NO = "No",
 
-		DATA_DAMAGED_PS4 = "Damaged save data",
-        DATA_DAMAGED_BODY = "Your save data is damaged and cannot be used.",
+		DATA_DAMAGED_PS4 = "Damaged saved data",
+        DATA_DAMAGED_BODY = "Your saved data is damaged and cannot be used.",
 		DISABLE_AUTOSAVE_PS4 = "Are you sure you want to\ndisable the save feature?",
         DISABLE = "Disable Save",
         RESTORE_BACKUP = "Restore Backup",
 		RESTORE_BACKUP_BODY = "Are you sure you want to restore from the last available backup? This process can not be undone.",
         RESTOREBACKUP_FAILED = "An error occurred while\nrestoring your data.",
-		OVERWRITE_SAVEDATA_TITLE = "Overwrite save data",
-		OVERWRITE_SAVEDATA_BODY = "Are you sure you want to overwrite your save data? Your settings and worlds will be lost. This process can not be undone.",
+		OVERWRITE_SAVEDATA_TITLE = "Overwrite saved data",
+		OVERWRITE_SAVEDATA_BODY = "Are you sure you want to overwrite your saved data? Your settings and worlds will be lost. This process can not be undone.",
     },
 
     QUITTINGTITLE = "Quitting!",
@@ -15946,12 +15947,12 @@ STRINGS.SKILLTREE = {
         WURT_AMPHIBIAN_HEALING_1_DESC = "Slowly regenerate health when wet. The more wet you are, the more health you regenerate.",
         WURT_AMPHIBIAN_HEALING_2_DESC = "Regenerate health when wet more effectively. It also make you slowly get wet as you step through the corrupted or mutated marsh turfs.",
         WURT_MOSQUITO_CRAFT_1_DESC = "Learn to craft a cuddly buddy making Mosquitoes neutral to you.",
-        WURT_MOSQUITO_CRAFT_2_DESC = "Learn to craft Mosquito based items: Skeeter Bomb, Fertilizzzer and Blood Shot",
+        WURT_MOSQUITO_CRAFT_2_DESC = "Learn to craft Mosquito based items: Skeeter Bomb, Fertilizzzer and Blood Shot.",
         WURT_MOSQUITO_CRAFT_3_DESC = "Master the use of the Mosquito based items.\n\nWith the help of Lil' Itchy, catch mosquitos right from the air.",
 
-        WURT_CIV_1_DESC = "Learn to craft the Communal Kelp Dish to entice faster Merm growth and to call in Merm for action.",
-        WURT_CIV_1_2_DESC = "Learn to craft the Superior Communal Kelp Dish, it holds more kelp for even faster Merm growth and calling in Merm for action.",
-        WURT_CIV_2_DESC = "Learn to craft the Shoddy Tool Shed to equip your Merm workers with Shoddy Tools.",
+        WURT_CIV_1_DESC = "Learn to craft the Communal Kelp Dish to entice faster merm growth and to call in merms for action.",
+        WURT_CIV_1_2_DESC = "Learn to craft the Superior Communal Kelp Dish, it holds more kelp for even faster merm growth and calling in merms for action.",
+        WURT_CIV_2_DESC = "Learn to craft the Shoddy Tool Shed to equip your merm workers with Shoddy Tools.",
         WURT_CIV_2_2_DESC = "Learn to craft the Slightly Less Shoddy Tool shed, it provides Slightly Less Shoddy Tools.",
         WURT_CIV_3_DESC = "Learn to craft the Armermry to equip your Loyal Merm Guards with Swamp Brawler Helmets.",
         WURT_CIV_3_2_DESC = "Learn to craft the Superior Armermry, it provides Swamp Warrior Helmets.",
@@ -15963,16 +15964,16 @@ STRINGS.SKILLTREE = {
 
         WURT_PATHFINDER_DESC = "Survivors near Wurt will move like her through the Marsh.",
         WURT_MERMKINGSHOULDERS_TITLE = "The King's Pauldron Quest",
-        WURT_MERMKINGSHOULDERS_DESC = "Add stony armor to the King's statuesque shoulders for greater stoutness in your Merm soldiers.",
+        WURT_MERMKINGSHOULDERS_DESC = "Add stony armor to the King's statuesque shoulders for greater stoutness in your merm soldiers.",
         WURT_MERMKINGCROWN_TITLE = "The King's Crown Quest",
         WURT_MERMKINGCROWN_DESC = "Gift him a crown worn by kings long passed, and your merms will fight smarter so their lives may last.",
         WURT_MERMKINGTRIDENT_TITLE = "The King's Trident Quest",
-        WURT_MERMKINGTRIDENT_DESC = "Offer this weapon best wielded at sea, and your Merms will attack with the deftness of three.",
+        WURT_MERMKINGTRIDENT_DESC = "Offer this weapon best wielded at sea, and your merms will attack with the deftness of three.",
 
         WURT_ALLEGIANCE_LOCK_1_DESC = "Learn 12 skills to unlock.",
-        WURT_LUNAR_ALLEGIANCE_1_DESC = "Grant your loyal Merms the wondrous gift of Lunar mutation by feeding them Moon Shards.\nEmpower your mutant merm with Planar power using Pure Brilliance.",
+        WURT_LUNAR_ALLEGIANCE_1_DESC = "Grant your loyal merms the wondrous gift of Lunar mutation by feeding them Moon Shards.\nEmpower your mutant merms with Planar power using Pure Brilliance.",
         WURT_LUNAR_ALLEGIANCE_2_DESC = "Morph any piece of land into sweet sweet Marsh.",
-        WURT_SHADOW_ALLEGIANCE_1_DESC = "Your Merm followers will have one foot in the Shadow world.\nInfuse shadow merm with Planar power using Pure Horror.",
+        WURT_SHADOW_ALLEGIANCE_1_DESC = "Your merm followers may die, but their shadows live on.\nInfuse fallen merms' shadows with Planar power using Pure Horror.",
         WURT_SHADOW_ALLEGIANCE_2_DESC = "No land shall be safe from the dark and beautiful corruption of the Marsh.",
     },
 }
@@ -16570,15 +16571,15 @@ STRINGS.SCRAPBOOK = {
         BOATPATCH_KELP = "A temporary solution for leaks. Sprung a leak? Use a kelp patch... then another... and another...",
         MOSQUITOMUSK = "Containing \"essence de moustique\" making any holder seem friendly to wild mosquitos.",
         MOSQUITOBOMB = "Packed so tight with wriggling friends that the explosive release of bugs inflicts damage to targets nearby.",
-        MOSQUITOMERMSALVE = "A useful healing device but only for merm, after all, the Mosquitos are mostly full of Merm blood to begin with.",
+        MOSQUITOMERMSALVE = "A useful healing device but only for Merms, after all, the Mosquitos are mostly full of Merm blood to begin with.",
 
-        MERM_ARMORY = "While stocked with Cut Grass and Logs, Guard Merm will grab a Swamp Brawler Helmet from it, reducing its stores.\n\nSwamp Brawler Helmets are a cheap way for a merm to get 50% protection from damage for a short while.",
-        MERM_ARMORY_UPGRADED = "While stocked with Cut Grass and Logs, Guard Merm will grab a Swamp Warrior Helmet from it, reducing its stores.\n\nSwamp Warrior Helmets are a better design over their Brawler cousin, providing 70% resistance from damage for a longer period of time.",
-        MERM_TOOLSHED = "While stocked with twigs and rocks, regular Merm will grab a Shoddy Tool from it, reducing its stores.\n\nShoddy tools will increase the amount of work a merm does for a short time.\n\nWith a shoddy tool, follower Merm will help chop trees, mine rocks, dig in a garden and Till soil.",
-        MERM_TOOLSHED_UPGRADED = "While stocked with twigs and rocks, regular Merm will grab a Slightly Less Shoddy Tool from it, reducing its stores.\n\nSlightly Less Shoddy tools increase the amount of work a merm does a little more than their lesser sibling, the Shoddy Tool.\n\nWith a shoddy tool, follower Merm will help chop trees, mine rocks, dig in a garden and Till soil.",
+        MERM_ARMORY = "While stocked with Cut Grass and Logs, Merm Guards will grab a Swamp Brawler Helmet from it, reducing its stores.\n\nSwamp Brawler Helmets are a cheap way for a Merm to get 50% protection from damage for a short while.",
+        MERM_ARMORY_UPGRADED = "While stocked with Cut Grass and Logs, Merm Guards will grab a Swamp Warrior Helmet from it, reducing its stores.\n\nSwamp Warrior Helmets are a better design over their Brawler cousin, providing 70% resistance from damage for a longer period of time.",
+        MERM_TOOLSHED = "While stocked with twigs and rocks, regular Merms will grab a Shoddy Tool from it, reducing its stores.\n\nShoddy Tools will increase the amount of work a Merm does for a short time.\n\nWith a Shoddy Tool, follower Merms will help chop trees, mine rocks, dig in a garden and till soil.",
+        MERM_TOOLSHED_UPGRADED = "While stocked with twigs and rocks, regular Merms will grab a Slightly Less Shoddy Tool from it, reducing its stores.\n\nSlightly Less Shoddy tools increase the amount of work a Merm does a little more than their lesser sibling, the Shoddy Tool.\n\nWith a Slightly Less Shoddy Tool, follower Merms will help chop trees, mine rocks, dig in a garden and till soil.",
 
-        OFFERING_POT = "Speeds up the respawning of Merm in Craftsmerm Houses, Merm Flort-ifications and Leaky Shacks.\n\nCan be used to call nearby merm to come eat the kelp and follow the Merm who summoned them.",        
-        OFFERING_POT_UPGRADED = "Speeds up the respawning of Merm in Craftsmerm Houses, Merm Flort-ifications and Leaky Shacks.\n\nCan be used to call nearby merm to come eat the kelp and follow the Merm who summoned them.",        
+        OFFERING_POT = "Speeds up the respawning of Merms in Craftsmerm Houses, Merm Flort-ifications and Leaky Shacks.\n\nCan be used to call nearby Merms to come eat the kelp and follow the Merm who summoned them.",        
+        OFFERING_POT_UPGRADED = "Speeds up the respawning of Merms in Craftsmerm Houses, Merm Flort-ifications and Leaky Shacks.\n\nCan be used to call nearby Merms to come eat the kelp and follow the Merm who summoned them.",        
     },
 
     -- Full name: "{name} Scrapbook Page"

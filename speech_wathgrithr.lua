@@ -60,7 +60,7 @@ return{
 		{
 			LOCKED_GATE = "Thou shalt not keep me out!",
             HOSTBUSY = "His attention lies elsewhere.",
-            CARNIVAL_HOST_HERE = "Where art though, raven? Do show yourself!",
+            CARNIVAL_HOST_HERE = "Where art thou, raven? Do show yourself!",
             NOCARNIVAL = "It seems the ravens hath returned to Odin.",
 			EMPTY_CATCOONDEN = "Fie! There's naught to pillage!",
 			KITCOON_HIDEANDSEEK_NOT_ENOUGH_HIDERS = "This hunt will require more players.",
@@ -5330,8 +5330,8 @@ return{
         MERM_ARMORY_UPGRADED = "The armory of the fish beast warriors.",
         MERM_TOOLSHED = "'Tis a place for workers, not warriors.",
         MERM_TOOLSHED_UPGRADED = "'Tis a place for workers, not warriors.",
-        MERMARMORHAT = "’Tis not for me",
-        MERMARMORUPGRADEDHAT = "’Tis not for me",
+        MERMARMORHAT = "’Tis not for me.",
+        MERMARMORUPGRADEDHAT = "’Tis not for me.",
         MERM_TOOL = "I suppose 'tis better than using one's hands.",
         MERM_TOOL_UPGRADED = "I suppose 'tis better than using one's hands.",
 

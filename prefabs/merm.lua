@@ -213,14 +213,15 @@ local function resolve_on_attacked(inst, attacker)
 end
 
 local function OnAttacked(inst, data)
-    local attacker = data and data.attacker
-    if attacker then
+    local attacker = data ~= nil and data.attacker or nil
+
+    if attacker ~= nil and inst:IsValid() then
         resolve_on_attacked(inst, attacker)
     end
 end
 
 local function OnAttackDodged(inst, attacker)
-    if attacker then
+    if attacker ~= nil and inst:IsValid() then
         resolve_on_attacked(inst, attacker)
     end
 end
@@ -721,6 +722,11 @@ local function DoThorns(inst)
 end
 
 local function DoLunarMutation(inst)
+    if inst.mutating then
+        return
+    end
+    inst.mutating = true
+
     local prefab = inst:HasTag("guard") and "mermguard_lunar" or "merm_lunar"
 
     local lunarmerm = SpawnPrefab(prefab)
@@ -753,6 +759,10 @@ local function DoLunarMutation(inst)
 end
 
 local function DoLunarRevert(inst)
+    if inst.reverting then
+        return
+    end
+    inst.reverting = true
     local prefab = inst:HasTag("guard") and "mermguard" or "merm"
 
     local merm = SpawnPrefab(prefab)
@@ -778,7 +788,6 @@ local function DoLunarRevert(inst)
 
     merm.components.combat:SetTarget(inst.components.combat.target)
     merm:PushEvent("demutated", {oldbuild=inst.AnimState:GetBuild()})
-
     inst:Remove()
 
     return merm
@@ -876,6 +885,8 @@ local function updateeyebuild(inst)
     end
 end
 
+local SCRAPBOOK_HIDE_SYMBOLS = { "hat", "ARM_carry", "ARM_carry_up" }
+
 local function MakeMerm(name, assets, prefabs, common_postinit, master_postinit,data)
     local function fn()
         local inst = CreateEntity()
@@ -914,7 +925,6 @@ local function MakeMerm(name, assets, prefabs, common_postinit, master_postinit,
         talker.resolvechatterfn = ResolveMermChatter
         talker:MakeChatter()
 
-
         if common_postinit ~= nil then
             common_postinit(inst)
         end
@@ -926,6 +936,8 @@ local function MakeMerm(name, assets, prefabs, common_postinit, master_postinit,
         if not TheWorld.ismastersim then
             return inst
         end
+
+        inst.scrapbook_hide = SCRAPBOOK_HIDE_SYMBOLS
 
         inst.ismerm = true
 
@@ -1428,7 +1440,7 @@ end
 -- LUNAR MERM DEFS
 
 local function OnChangedLeaderLunar(inst, new_leader)
-    if new_leader == nil and not inst.components.health:IsDead() then
+    if inst:IsValid() and new_leader == nil and not inst.components.health:IsDead() then
         DoLunarRevert(inst)
     end
 end

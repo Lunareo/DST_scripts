@@ -1409,6 +1409,9 @@ local COMPONENT_ACTIONS =
 				recipe = GetValidRecipe(target.SCANNABLE_RECIPENAME)
 			else
 				recipe = AllRecipes[target.prefab]
+				if recipe and recipe.source_recipename then --in case of deconstruction recipe for a deployed item
+					recipe = GetValidRecipe(recipe.source_recipename)
+				end
 			end
 			if recipe and not (recipe.nounlock or FunctionOrValue(recipe.no_deconstruction, target)) then
 				table.insert(actions, ACTIONS.TEACH)
@@ -1522,7 +1525,7 @@ local COMPONENT_ACTIONS =
         end,        
 
         tool = function(inst, doer, target, actions, right)
-            if not target:HasTag("INLIMBO") then
+            if not target:HasTag("INLIMBO") and not (inst.replica.equippable ~= nil and inst.replica.equippable:IsRestricted(doer)) then
                 for k, v in pairs(TOOLACTIONS) do
                     if inst:HasTag(k.."_tool") then
                         if target:IsActionValid(ACTIONS[k], right) then
@@ -1714,7 +1717,7 @@ local COMPONENT_ACTIONS =
         end,
 
         complexprojectile = function(inst, doer, pos, actions, right, target)
-            if right and (not TheWorld.Map:IsGroundTargetBlocked(pos) or (inst:HasTag("complexprojectile_showoceanaction") and TheWorld.Map:IsOceanAtPoint(pos.x, 0, pos.z)))
+            if right and (not TheWorld.Map:IsGroundTargetBlocked(pos) or (inst:HasTag("complexprojectile_showoceanaction") and TheWorld.Map:IsOceanAtPoint(pos.x, 0, pos.z))) and not doer:HasTag("steeringboat") and not doer:HasTag("rotatingboat")
                 and (inst.CanTossInWorld == nil or inst:CanTossInWorld(doer, pos))
 				and not (inst.replica.equippable ~= nil and (inst.replica.equippable:IsRestricted(doer) or inst.replica.equippable:ShouldPreventUnequipping()))
 				and not (inst:HasTag("special_action_toss") or inst:HasTag("deployable")) then
@@ -2003,7 +2006,10 @@ local COMPONENT_ACTIONS =
         end,
 
 		remoteteleporter = function(inst, doer, target, actions, right)
-			if target == doer and (not inst:HasTag("engineering") or doer:HasTag("handyperson")) then
+			if target == doer and (not inst:HasTag("engineering") or doer:HasTag("handyperson")) and
+				not (doer.components.playercontroller and
+					doer.components.playercontroller.isclientcontrollerattached)
+			then
 				table.insert(actions, ACTIONS.REMOTE_TELEPORT)
 			end
 		end,

@@ -2348,7 +2348,7 @@ function Tune(overrides)
         MOSSLING_DAMAGE = 50,
         MOSSLING_ATTACK_PERIOD = 3,
         MOSSLING_ATTACK_RANGE = 2,
-        MOSSLING_WALK_SPEED = 5,
+        MOSSLING_WALK_SPEED = 8, --5
 
         TOADSTOOL_HEALTH = 52500,
         TOADSTOOL_ATTACK_RANGE = 7,
@@ -3192,6 +3192,7 @@ function Tune(overrides)
         ANTLION_SLOW_DOWN = .4,
         ANTLION_CAST_RANGE = 15,
         ANTLION_CAST_MAX_RANGE = 20,
+        ANTLION_DEAGGRO_DIST = 30, -- NOTES(JBK): This was never declared so this value is just an approximate.
         ANTLION_WALL_CD = 20,
         ANTLION_HIT_RECOVERY = 1,
         ANTLION_EAT_HEALING = 200,
@@ -5154,9 +5155,12 @@ function Tune(overrides)
         CRABKING_HEALTH = 12000,
         CRABKING_HEALTH_BONUS = 1000,
 
+
+
         CRABKING_CLAW_BOATDAMAGE = 35,
         CRABKING_CLAW_HEALTH = 200,
         CRABKING_CLAW_HEALTH_BOOST = 200,
+        CRABKING_CLAW_HEALTH_BOOST_MAXGEM = 400,
         CRABKING_CLAW_WALK_SPEED = 1,
         CRABKING_CLAW_RUN_SPEED = 4,
         CRABKING_CLAW_RESPAWN_DELAY = 30,-- time each claw must regen for before being spawnable
@@ -5212,9 +5216,10 @@ function Tune(overrides)
 
         CRABKING_ICEWALL_HEALTH = 100,
         CRABKING_ICEWALL_HEALTH_BONUS = 200,
+        CRABKING_ICEWALL_HEALTH_BONUS_MAXGEM = 400,
 
-        CRABKING_MOB_HEALTH = 200,
-        CRABKING_MOB_HEALTH_BONUS = 40,
+        CRABKING_MOB_HEALTH = 200,        
+        CRABKING_MOB_HEALTH_BONUS_MAXGEM = 200,
         CRABKING_MOB_DAMAGE = 30,
         CRABKING_MOB_ATTACK_PERIOD = 4,
         CRABKING_MOB_ATTACK_RANGE = 3,
@@ -5236,6 +5241,7 @@ function Tune(overrides)
         CRABKING_CANNONTOWER_HULL_SMASH_DAMAGE = 40,
         CRABKING_MORTAR_DAMAGE = 20,
         CRABKING_MORTAR_DAMAGE_BONUS = 5,
+        CRABKING_MORTAR_MAXGEM_DAMAGE_BONUS = 25,
 
         CRABKING_WAVE_ATTACK_TIMEOUT_TIME = 8,
 
@@ -7692,7 +7698,6 @@ function Tune(overrides)
         OTTER_DAMAGE = 35,
         OTTER_RUNSPEED = 6,
         OTTER_WALKSPEED = 3,
-        OTTER_HIT_RANGE = 2,
         OTTER_ATTACK_RANGE = 3,
         OTTER_ATTACK_PERIOD = 4,
         OTTER_KEEPTARGET_DISTANCE = 20,

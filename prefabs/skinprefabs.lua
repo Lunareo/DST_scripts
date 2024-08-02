@@ -1106,6 +1106,16 @@ table.insert(prefs, CreatePrefabSkin("beargervest_yule",
 	release_group = 138,
 }))
 
+table.insert(prefs, CreatePrefabSkin("bedroll_furry_catcoon",
+{
+	base_prefab = "bedroll_furry",
+	type = "item",
+	rarity = "Loyal",
+	init_fn = function(inst) bedroll_furry_init_fn(inst, "bedroll_furry_catcoon") end,
+	skin_tags = { "BEDROLL", "CRAFTABLE", },
+	release_group = 157,
+}))
+
 table.insert(prefs, CreatePrefabSkin("bedroll_furry_potato",
 {
 	base_prefab = "bedroll_furry",
@@ -4422,10 +4432,10 @@ table.insert(prefs, CreatePrefabSkin("icebox_kitchen",
 	type = "item",
 	rarity = "Elegant",
 	rarity_modifier = "Woven",
-	prefabs = { "icebox_porcelain_fx", },
+	prefabs = { "icebox_kitchen_fx", },
 	init_fn = function(inst) icebox_init_fn(inst, "icebox_kitchen") end,
 	skin_tags = { "ICEBOX", "COTTAGE", "CRAFTABLE", },
-	fx_prefab = { "icebox_porcelain_fx", },
+	fx_prefab = { "icebox_kitchen_fx", },
 	release_group = 156,
 }))
 
@@ -6099,6 +6109,37 @@ table.insert(prefs, CreatePrefabSkin("pottedfern_cotl3",
 	release_group = 147,
 }))
 
+table.insert(prefs, CreatePrefabSkin("pottedfern_rose",
+{
+	base_prefab = "pottedfern",
+	type = "item",
+	rarity = "Loyal",
+	init_fn = function(inst) pottedfern_init_fn(inst, "pottedfern_rose") end,
+	skin_tags = { "POTTEDFERN", "ROSE", "CRAFTABLE", },
+	release_group = 157,
+	granted_items = { "pottedfern_rose2", "pottedfern_rose3", },
+}))
+
+table.insert(prefs, CreatePrefabSkin("pottedfern_rose2",
+{
+	base_prefab = "pottedfern",
+	type = "item",
+	rarity = "Loyal",
+	init_fn = function(inst) pottedfern_init_fn(inst, "pottedfern_rose2") end,
+	skin_tags = { "POTTEDFERN", "ROSE", "CRAFTABLE", },
+	release_group = 157,
+}))
+
+table.insert(prefs, CreatePrefabSkin("pottedfern_rose3",
+{
+	base_prefab = "pottedfern",
+	type = "item",
+	rarity = "Loyal",
+	init_fn = function(inst) pottedfern_init_fn(inst, "pottedfern_rose3") end,
+	skin_tags = { "POTTEDFERN", "ROSE", "CRAFTABLE", },
+	release_group = 157,
+}))
+
 table.insert(prefs, CreatePrefabSkin("premiumwateringcan_koalefant",
 {
 	base_prefab = "premiumwateringcan",
@@ -7632,6 +7673,16 @@ table.insert(prefs, CreatePrefabSkin("tent_circus",
 	release_group = 48,
 }))
 
+table.insert(prefs, CreatePrefabSkin("tent_kid",
+{
+	base_prefab = "tent",
+	type = "item",
+	rarity = "ProofOfPurchase",
+	init_fn = function(inst) tent_init_fn(inst, "tent_kid") end,
+	skin_tags = { "TENT", "CRAFTABLE", },
+	release_group = 156,
+}))
+
 table.insert(prefs, CreatePrefabSkin("tent_leaf",
 {
 	base_prefab = "tent",
@@ -8330,6 +8381,16 @@ table.insert(prefs, CreatePrefabSkin("treasurechest_vintage",
 	skin_tags = { "COTTAGE", "CHEST", "CRAFTABLE", },
 	release_group = 118,
 	granted_items = { "treasurechest_upgraded_vintage", },
+}))
+
+table.insert(prefs, CreatePrefabSkin("trident_merm",
+{
+	base_prefab = "trident",
+	type = "item",
+	rarity = "ProofOfPurchase",
+	init_fn = function(inst) trident_init_fn(inst, "trident_merm") end,
+	skin_tags = { "TRIDENT", "CRAFTABLE", },
+	release_group = 156,
 }))
 
 table.insert(prefs, CreatePrefabSkin("trophyscale_fish_handmade",

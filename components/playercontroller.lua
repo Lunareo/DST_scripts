@@ -81,6 +81,7 @@ local function PullUpMap(inst, maptarget)
                 inst.HUD.controls:FocusMapOnWorldPosition(mapscreen, wx, wz)
             end
             -- Do not have to take into account max_dist because the map automatically centers on the player when opened.
+            mapscreen:ProcessStaticDecorations()
         end
     end
 end
@@ -4158,14 +4159,15 @@ function PlayerController:GetMapActions(position, maptarget)
     local pos = self.inst:GetPosition()
 
     self.inst.checkingmapactions = true -- NOTES(JBK): Workaround flag to not add function argument changes for this task and lets things opt-in to special handling.
+    local action_maptarget = maptarget and maptarget:IsValid() and not maptarget:HasTag("INLIMBO") and maptarget or nil -- NOTES(JBK): Workaround passing the maptarget entity if it is out of scope for world actions.
 
-    local lmbact = self.inst.components.playeractionpicker:GetLeftClickActions(pos, maptarget)[1]
+    local lmbact = self.inst.components.playeractionpicker:GetLeftClickActions(pos, action_maptarget)[1]
     if lmbact then
         lmbact.maptarget = maptarget
         LMBaction = self:RemapMapAction(lmbact, position)
     end
 
-    local rmbact = self.inst.components.playeractionpicker:GetRightClickActions(pos, maptarget)[1]
+    local rmbact = self.inst.components.playeractionpicker:GetRightClickActions(pos, action_maptarget)[1]
     if rmbact then
         rmbact.maptarget = maptarget
         RMBaction = self:RemapMapAction(rmbact, position)
