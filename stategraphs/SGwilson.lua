@@ -869,6 +869,10 @@ local actionhandlers =
                     )
                 or "castspell"
         end),
+    ActionHandler(ACTIONS.STOKEFIRE,
+        function(inst, action)
+            return "castspellmind"
+        end),
     ActionHandler(ACTIONS.CAST_POCKETWATCH,
         function(inst, action)
             return action.invobject ~= nil
@@ -1258,7 +1262,7 @@ local events =
 	end),
 
     EventHandler("attacked", function(inst, data)
-        if not inst.components.health:IsDead() and not inst.sg:HasStateTag("drowning") then
+        if not inst.components.health:IsDead() and not inst.sg:HasStateTag("drowning") and not inst.sg:HasStateTag("falling") then
             if data.weapon ~= nil and data.weapon:HasTag("tranquilizer") and (inst.sg:HasStateTag("bedroll") or inst.sg:HasStateTag("knockout")) then
                 return --Do nothing
             elseif inst.sg:HasStateTag("transform") or inst.sg:HasStateTag("dismounting") then
@@ -1383,7 +1387,7 @@ local events =
 
     EventHandler("souloverload",
         function(inst)
-            if not (inst.components.health:IsDead() or inst.sg:HasStateTag("sleeping") or inst.sg:HasStateTag("drowning")) then
+            if not (inst.components.health:IsDead() or inst.sg:HasStateTag("sleeping") or inst.sg:HasStateTag("drowning") or inst.sg:HasStateTag("falling")) then
                 inst.components.talker:Say(GetString(inst, "ANNOUNCE_SOUL_OVERLOAD"))
                 if inst.sg:HasStateTag("jumping") then
                     inst.sg.statemem.queued_post_land_state = "hit_souloverload"
@@ -1646,7 +1650,7 @@ local events =
         function(inst)
             if inst.sg:HasStateTag("knockout") then
                 inst.sg.statemem.cometo = nil
-            elseif not (inst.sg:HasStateTag("sleeping") or inst.sg:HasStateTag("bedroll") or inst.sg:HasStateTag("tent") or inst.sg:HasStateTag("waking") or inst.sg:HasStateTag("drowning")) then
+            elseif not (inst.sg:HasStateTag("sleeping") or inst.sg:HasStateTag("bedroll") or inst.sg:HasStateTag("tent") or inst.sg:HasStateTag("waking") or inst.sg:HasStateTag("drowning") or inst.sg:HasStateTag("falling")) then
                 if inst.sg:HasStateTag("jumping") then
                     inst.sg.statemem.queued_post_land_state = "knockout"
                 else
@@ -10315,7 +10319,7 @@ local states =
         events =
         {
             EventHandler("firedamage", function(inst)
-                if inst.sg:HasStateTag("sleeping") and not inst.sg:HasStateTag("drowning") then
+                if inst.sg:HasStateTag("sleeping") and not inst.sg:HasStateTag("drowning") and not inst.sg:HasStateTag("falling") then
                     inst.sg.statemem.iswaking = true
                     inst.sg:GoToState("wakeup")
                 else
@@ -10323,7 +10327,7 @@ local states =
                 end
             end),
             EventHandler("cometo", function(inst)
-                if inst.sg:HasStateTag("sleeping") and not inst.sg:HasStateTag("drowning") then
+                if inst.sg:HasStateTag("sleeping") and not inst.sg:HasStateTag("drowning") and not inst.sg:HasStateTag("falling") then
                     inst.sg.statemem.iswaking = true
                     inst.sg:GoToState("wakeup")
                 else
@@ -11860,7 +11864,7 @@ local states =
             inst.components.locomotor:Stop()
             inst:ClearBufferedAction()
 
-			inst.AnimState:PlayAnimation("knockback_high")
+			inst.AnimState:PlayAnimation(data and data.starthigh and "bucked" or "knockback_high")
 
             if data ~= nil then
                 if data.disablecollision then
@@ -12355,6 +12359,7 @@ local states =
 					DoHurtSound(inst)
 					inst.sg:HandleEvent("knockback", {
 						knocker = attacker,
+						starthigh = data and data.starthigh or nil,
 						radius = data ~= nil and data.radius or physradius + 1,
 						strengthmult = data ~= nil and data.strengthmult or nil,
 					})
@@ -12486,6 +12491,7 @@ local states =
 					DoHurtSound(inst)
 					inst.sg:HandleEvent("knockback", {
 						knocker = attacker,
+						starthigh = data and data.starthigh or nil,
 						radius = data ~= nil and data.radius or physradius + 1,
 						strengthmult = data ~= nil and data.strengthmult or nil,
 					})

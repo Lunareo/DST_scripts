@@ -175,6 +175,10 @@ local function PlanNextAttack()
 		_warnduration = _warndurationfn()
 		_attackplanned = true
 		_wave_pre_upgraded = nil
+
+    	if _spawndata.specialupgradecheck then
+    		_wave_pre_upgraded, _wave_override_chance = _spawndata.specialupgradecheck(_wave_pre_upgraded, _wave_override_chance, _wave_override_settings)
+    	end			
 	else
 		_attackplanned = false
 	end
@@ -395,7 +399,15 @@ local function SummonSpawn(pt, upgrade, radius_override)
     if spawn_pt ~= nil then
         local spawn = SpawnPrefab(GetSpawnPrefab(upgrade))
         if spawn ~= nil then
-        	if spawn.Physics then
+
+			if spawn.hounded_overridelocation then
+    			local new_spawn_pt = spawn:hounded_overridelocation(pt)
+    			if new_spawn_pt then
+    				spawn_pt = new_spawn_pt
+    			end
+    		end
+
+        	if spawn.Physics then        		
             	spawn.Physics:Teleport(spawn_pt:Get())
         	else
         		spawn.Transform:SetPosition(spawn_pt:Get())
@@ -923,10 +935,6 @@ function self:OnUpdate(dt)
     end
 
     if _timetoattack < 0 then
-    	if _spawndata.specialupgradecheck then
-    		_wave_pre_upgraded, _wave_override_chance = _spawndata.specialupgradecheck(_wave_pre_upgraded, _wave_override_chance, _wave_override_settings)
-    	end
-
         _warning = false
 
 		-- Okay, it's hound-day, get number of dogs for each player

@@ -1,3 +1,8 @@
+--------------------------------------------------------------------------
+-- *** WARNING ***
+--  This stategraph is also used by babybeefalo!!!
+--------------------------------------------------------------------------
+
 require("stategraphs/commonstates")
 
 local actionhandlers =
@@ -618,9 +623,7 @@ local states=
                 inst.SoundEmitter:PlaySound(inst.sounds.yell)
             end
 
-            local leader = inst.components.follower:GetLeader()
-            
-            if load or (leader ~= nil and leader:HasTag("shadowbell")) then
+            if load or inst.ShouldKeepCorpse and inst:ShouldKeepCorpse() then
                 if inst.components.freezable ~= nil then
                     inst.components.freezable:Unfreeze()
                 end
@@ -666,8 +669,6 @@ local states=
         {
             FrameEvent(45, function(inst)
                 inst.AnimState:SetMultColour(0, 0, 0, 1)
-
-                inst.components.skinner_beefalo:ClearAllClothing()
             end),
 
             FrameEvent(133, function(inst)

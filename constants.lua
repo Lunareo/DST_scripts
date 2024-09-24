@@ -1081,7 +1081,8 @@ end
 FE_MUSIC =
     (FESTIVAL_EVENT_MUSIC[WORLD_FESTIVAL_EVENT] ~= nil and FESTIVAL_EVENT_MUSIC[WORLD_FESTIVAL_EVENT].sound) or
     (SPECIAL_EVENT_MUSIC[WORLD_SPECIAL_EVENT] ~= nil and SPECIAL_EVENT_MUSIC[WORLD_SPECIAL_EVENT].sound) or
-    "dontstarve/music/music_FE_winonawurt"
+    "dontstarve/music/music_FE_rifts4"
+    --"dontstarve/music/music_FE_winonawurt"
     --"dontstarve/music/music_FE_junkyardhog"
     --"dontstarve/music/music_FE_riftsthree"
     --"dontstarve/music/music_FE_survivorsguideone"
@@ -2295,7 +2296,7 @@ WORMHOLETYPE =
     OCEANWHIRLPORTAL = 2,
 }
 
--- Houndwarning level
+-- Houndwarning level, max value of 63 (net_smallbyte)
 HOUNDWARNINGTYPE =
 {
     LVL1 = 0,
@@ -2770,6 +2771,6 @@ CLIENTAUTHORITATIVESETTINGS = {
 }
 
 NIGHTSWORD_FX_OFFSETS = {
-    RIGHT = -1,
-    DOWN = 2.6,
+    RIGHT = 0.75,-- -1,
+    DOWN = 2.9,-- 2.6,
 }

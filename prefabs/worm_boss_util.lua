@@ -86,6 +86,7 @@ local function SpawnDirt(inst, chunk, pt, start, instant)
 
     local state =
         (instant and "dirt_idle"    ) or
+        (start   and #inst.chunks == 1 and "dirt_emerge_loop_pre") or
         (start   and "dirt_pre_slow") or
         "dirt_emerge"
 
@@ -130,12 +131,6 @@ local function DoChew(inst, target, useimpactsound)
     end
 
     if IsDevouring(inst, target) then
-        local minhealth = target.components.health.minhealth
-
-        if minhealth == 0 then
-            target.components.health:SetMinHealth(math.min(1, target.components.health.currenthealth))
-        end
-
         local dmg, spdmg = inst.components.combat:CalcDamage(target)
         local noimpactsound = target.components.combat.noimpactsound
 
@@ -147,8 +142,6 @@ local function DoChew(inst, target, useimpactsound)
         target.components.combat:GetAttacked(inst, dmg, nil, nil, spdmg)
         target.components.combat.noimpactsound = noimpactsound
 
-        target.components.health:SetMinHealth(0)
-        
         if target.components.sanity then
             target.components.sanity:DoDelta(-TUNING.SANITY_SUPERTINY)
         end
@@ -168,14 +161,15 @@ local function ChewAll(inst)
 end
 
 local function DoSpitOut(inst, target, spitfromhead, spitfromlocatoin)
-    if IsDevouring(inst, target) and (target:HasTag("player") or target:HasTag("devourable")) then
+    if IsDevouring(inst, target) and target:HasOneOfTags("player", "devourable") then
         local source =
             (spitfromlocatoin and target   ) or
             (spitfromhead     and inst.head) or
             inst.tail
 
-        target.sg.currentstate:HandleEvent(target.sg, "spitout", { spitter = source, radius = inst:GetPhysicsRadius(0) + 3, strengthmult = 1 , rot=math.random()*360 })
-    elseif not target:HasTag("irreplaceable") then
+		target.sg.currentstate:HandleEvent(target.sg, "spitout", { spitter = source, starthigh = true, radius = inst:GetPhysicsRadius(0) + 3, strengthmult = 1 , rot=math.random()*360 })
+
+    elseif not target:HasOneOfTags("player", "irreplaceable") then
         target:Remove()
     end
 end
@@ -319,6 +313,19 @@ local function TransferCreatureInventory(inst, target)
     end
 end
 
+local function OnThingExitDevouredState(inst, data)
+    inst:RemoveEventCallback("newstate", OnThingExitDevouredState)
+
+    if inst.components.health ~= nil then
+        if inst.components.oldager ~= nil then
+            -- Fast forward Wanda's overtime damage, so she doesn't die when getting out.
+            inst.components.oldager:FastForwardDamageOverTime()
+        end
+
+        inst.components.health:SetMinHealth(0)
+    end
+end
+
 local FOOD_CANT_TAGS = { "INLIMBO", "NOCLICK", "FX", "DECOR", "largecreature", "worm_boss_piece", "noattack", "notarget", "playerghost" }
 local FOOD_ONEOF_TAGS = { "_inventoryitem", "character", "smallcreature"}
 
@@ -339,16 +346,17 @@ local function CollectThingsToEat(inst, source)
                 inst.components.combat:DropTarget()
             end
 
-            if ent.components.inventoryitem ~= nil then                
-
-
+            if ent.components.inventoryitem ~= nil then
                 if not inst.components.inventory:IsFull() then
                     if ent.components.edible then
                         calories = calories + ent.components.edible.hungervalue
-                    end                    
+                    end
+
                     inst.components.inventory:GiveItem(ent)
+
                     ate = true
-                else
+
+                elseif inst.head ~= nil then
                     inst.head.components.lootdropper:FlingItem(ent)
                 end
             else
@@ -362,6 +370,14 @@ local function CollectThingsToEat(inst, source)
 
                         if ent:HasOneOfTags("player", "devourable") then
                             ent.sg:HandleEvent("devoured", { attacker = inst, ignoresetcamdist = true })
+
+                            local minhealth = ent.components.health ~= nil and ent.components.health.minhealth or nil
+
+                            if minhealth == 0 then
+                                ent.components.health:SetMinHealth(1)
+
+                                ent:ListenForEvent("newstate", OnThingExitDevouredState)
+                            end
 
                             table.insert(inst.devoured, ent)
 
@@ -560,6 +576,20 @@ local function FindOffsetForNewChunk(inst, lastchunk)
 
         range = range + 1
     end
+
+    -- We don't a nearby point to go, reappear somewhere...
+
+    while range <= 30 do
+        local theta = TWOPI * math.random()
+
+        local offset = FindWalkableOffset(lastchunk.groundpoint_end, theta, range, 16, true, true, IsPointValid, false, false)
+
+        if offset ~= nil then
+            return offset
+        end
+
+        range = range + 1
+    end
 end
 
 local function PlotNextChunk(inst, lastchunk)
@@ -649,22 +679,10 @@ local function SetCreateChunkTask(inst, pt)
 end
 
 local function MoveSegmentUnderGround(inst, chunk, test_segment, percent, instant)
-    for i, segment in ipairs(chunk.segments) do
-        if segment == test_segment then
-            table.remove(chunk.segments, i)
+    table.removearrayvalue(chunk.segments, test_segment)
 
-            if #chunk.segments < 1 then
-                for j, testchunk in ipairs(inst.chunks) do
-                    if testchunk == chunk then
-                        table.remove(inst.chunks, j)
-
-                        break
-                    end
-                end
-            end
-
-            break
-        end
+    if #chunk.segments <= 0 then
+        table.removearrayvalue(inst.chunks, chunk)
     end
 
     if test_segment.head then
@@ -722,6 +740,11 @@ local function AddSegment(inst, chunk, tail, instant)
     local p0 = Vector3(chunk.groundpoint_start.x, 0, chunk.groundpoint_start.z)
     local p1 = Vector3(chunk.groundpoint_end.x,   0, chunk.groundpoint_end.z  )
 
+    segment._dirt_start_x:set(chunk.groundpoint_start.x)
+    segment._dirt_start_z:set(chunk.groundpoint_start.z)
+    segment._dirt_end_x:set(chunk.groundpoint_end.x)
+    segment._dirt_end_z:set(chunk.groundpoint_end.z)
+
     local pdelta = p1 - p0
 
     local t = segment.segtime/chunk.segtimeMax
@@ -734,6 +757,8 @@ local function AddSegment(inst, chunk, tail, instant)
 
     segment.Transform:SetPosition(pf:Get())
     segment.Transform:SetRotation(segment:GetAngleToPoint(chunk.groundpoint_end:Get()))
+
+    segment:UpdatePredictionData(chunk.ease, segment.segtime)  -- Prease update client prediction in worm_boss.lua in any calculation changes are made here.
 
     if ShouldDoSpikeDamage(chunk) then
         segment:DoThornDamage()
@@ -764,7 +789,6 @@ local function IsChunkMoving(inst, chunk)
 end
 
 local function SpawnAboveGroundHeadCorpse(inst, headchunk)
-
     for _, segment in ipairs(headchunk.segments) do
         for i=#headchunk.segments, 1, -1 do
             inst:ReturnSegmentToPool(headchunk.segments[i])
@@ -786,19 +810,19 @@ local function SpawnUnderGroundHeadCorpse(inst)
     local pt = nil
     if inst.createnewchunktask == nil then
         if #inst.chunks > 0 then
-            pt = inst.chunks[#inst.chunks].groundpoint_start        
+            pt = inst.chunks[#inst.chunks].groundpoint_start
         else
             return
         end
     else
         pt = inst.createnewchunktask._target_pt
         inst.createnewchunktask:Cancel()
-        inst.createnewchunktask = nil            
+        inst.createnewchunktask = nil
     end
- 	
+
 	local headchunk = CreateNewChunk(inst, pt, true)
 
-    
+
     EmergeHead(inst, headchunk, true)
     inst.head.sg:GoToState("emerge", { dead = true } )
 
@@ -864,11 +888,15 @@ local function UpdateRegularChunk(inst, chunk, dt, instant)
     end
 
     -- MOVE SEGMENTS ALONG TOWARD ENDPOINT
-    for i, segment in ipairs(chunk.segments) do
+    for i = #chunk.segments, 1, -1 do
+        local segment = chunk.segments[i]
+
         local p1 = chunk.groundpoint_end
         local p0 = chunk.groundpoint_start
 
         local pdelta = p1 - p0
+
+        segment:UpdatePredictionData(speed, segment.segtime) -- Prease update client prediction in worm_boss.lua in any calculation changes are made here.
 
         segment.segtime = math.min(segment.segtime + (dt * speed), chunk.segtimeMax)
 
@@ -880,7 +908,7 @@ local function UpdateRegularChunk(inst, chunk, dt, instant)
 
         segment.setheight = pf.y
 
-        segment.Transform:SetPosition(pf.x,pf.y,pf.z)
+        segment.Transform:SetPosition(pf:Get())
 
         -- REACHED JUST ABOUT TO THE END, TIME TO GO UNDERGROUND.
         if t > 0.98 then
@@ -1089,7 +1117,7 @@ local function UpdateRegularChunk(inst, chunk, dt, instant)
 
     if chunk.hit and chunk.hit > 0 then
         local scale = Remap(chunk.hit, 1, 0, 0.75, 1)
-        
+
         for i, segment in ipairs(chunk.segments) do
             segment.Transform:SetScale(scale, scale, scale)
 
@@ -1209,7 +1237,9 @@ local function UpdateRegularDeadChunk_Simplified(inst, chunk, dt, instant)
         end
     end
 
-    for i, segment in ipairs(chunk.segments) do
+    for i = #chunk.segments, 1, -1 do
+        local segment = chunk.segments[i]
+
         segment.percentdist = segment.segtime/chunk.segtimeMax
         UpdateSegmentAnimPosition(segment, segment.percentdist)
 
@@ -1222,13 +1252,15 @@ local function UpdateRegularDeadChunk_Simplified(inst, chunk, dt, instant)
 
         local t = segment.segtime/chunk.segtimeMax
 
+        segment:UpdatePredictionData(1, segment.segtime) -- Prease update client prediction in worm_boss.lua in any calculation changes are made here.
+
         local tmod = easing.inOutQuad(t, 0, 1, 1)
 
         local pf = (pdelta * tmod) + p0
 
         segment.setheight = pf.y
 
-        segment.Transform:SetPosition(pf.x,pf.y,pf.z)
+        inst.Transform:SetPosition(pf:Get())
 
         -- REACHED JUST ABOUT TO THE END, TIME TO GO UNDERGROUND.
         if t > 0.98 then
@@ -1306,6 +1338,7 @@ return {
     CHUNK_TEMPLATE = CHUNK_TEMPLATE,
     STATE = STATE,
     WORM_LENGTH = WORM_LENGTH,
+    MAX_SEGTIME = CHUNK_TEMPLATE.segtimeMax,
 
     ChewAll = ChewAll,
     CreateNewChunk = CreateNewChunk,
