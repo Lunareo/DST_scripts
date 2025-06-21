@@ -1,9 +1,3 @@
-
-local prefabs =
-{
-	"alterguardian_hat_equipped_client",
-}
-
 local assets =
 {
 	Asset("ANIM", "anim/hat_alterguardian_equipped.zip"),
@@ -43,6 +37,8 @@ local function fn()
     inst.AnimState:PlayAnimation("idle", true)
 	inst.AnimState:SetFinalOffset(1)
 	inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
+	inst.AnimState:SetSymbolMultColour("flame_swap", 1, 1, 1, 0.2)
+	inst.AnimState:SetSymbolLightOverride("flame_swap", 0.5)
 
 	inst.Transform:SetNoFaced()
 
@@ -64,11 +60,4 @@ local function fn()
     return inst
 end
 
-local function client_fn()
-    local inst = CreateEntity()
-
-    return inst
-end
-
-return Prefab("alterguardian_hat_equipped", fn, nil, prefabs),
-	 Prefab("alterguardian_hat_equipped_client", client_fn, assets)
+return Prefab("alterguardian_hat_equipped", fn, assets)
