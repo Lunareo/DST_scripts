@@ -818,10 +818,10 @@ local states =
 			inst.components.locomotor:Stop()
 			inst.AnimState:PlayAnimation("activate1")
 			inst.SoundEmitter:KillSound("loop")
-			if inst.hostile then
-				TheWorld:PushEvent("ms_wagboss_robot_losecontrol")
-			else
+			if not inst.hostile then
 				inst.AnimState:Hide("fx_activation")
+			elseif TheWorld.Map:IsPointInWagPunkArenaAndBarrierIsUp(inst.Transform:GetWorldPosition()) then
+				TheWorld:PushEvent("ms_wagboss_robot_losecontrol")
 			end
 			if POPULATING then
 				inst.sg:GoToState("idle")
@@ -900,9 +900,11 @@ local states =
 			inst:ConfigureFriendly()
 			inst.components.locomotor:Stop()
 			inst.AnimState:PlayAnimation("activate2")
-			TheWorld:PushEvent("ms_wagboss_robot_losecontrol")
-			if not (TheWorld.components.wagboss_tracker and TheWorld.components.wagboss_tracker:IsWagbossDefeated()) then
-				inst:EnableCameraFocus(true)
+			if TheWorld.Map:IsPointInWagPunkArenaAndBarrierIsUp(inst.Transform:GetWorldPosition()) then
+				TheWorld:PushEvent("ms_wagboss_robot_losecontrol")
+				if not (TheWorld.components.wagboss_tracker and TheWorld.components.wagboss_tracker:IsWagbossDefeated()) then
+					inst:EnableCameraFocus(true)
+				end
 			end
 		end,
 
@@ -1662,6 +1664,8 @@ local states =
 			local taskdata = { missiles = inst.sg.statemem.missiles, grouptargets = grouptargets }
 			taskdata.task = inst:DoPeriodicTask(1, TryRetargetMissiles, nil, taskdata)
 
+			inst.components.epicscare:Scare(5)
+
 			--inst.components.combat:RestartCooldown()
 			inst.components.timer:StopTimer("missiles_cd")
 			inst.components.timer:StartTimer("missiles_cd", GetRandomMinMax(unpack(TUNING.WAGBOSS_ROBOT_MISSILES_CD)))
@@ -2004,7 +2008,6 @@ local states =
 				inst.sg:AddStateTag("noattack")
 				DoJumpShake(inst)
 				inst:SetMusicLevel(2) --silence
-				TheWorld:PushEvent("ms_wagstaff_arena_oneshot", { strname = "WAGSTAFF_WAGPUNK_ARENA_SCIONREVEAL", monologue = true, focusentity = inst })
 			end),
 			FrameEvent(54, function(inst) inst.SoundEmitter:KillSound("loop") end),
 			FrameEvent(72, GetUpShake1),

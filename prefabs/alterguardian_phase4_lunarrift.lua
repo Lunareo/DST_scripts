@@ -134,7 +134,8 @@ end
 
 --------------------------------------------------------------------------
 
-local ENTER_DOMAIN_RANGE_SQ = 24 * 24
+local ENTER_DOMAIN_RANGE = 24
+local ENTER_DOMAIN_RANGE_SQ = ENTER_DOMAIN_RANGE * ENTER_DOMAIN_RANGE
 local EXIT_DOMAIN_RANGE_SQ = 32 * 32
 
 local function DomainExpansionUpdate(inst)
@@ -457,7 +458,6 @@ local function InitCheckSpawnBuild(inst)
 		inst.AnimState:ClearOverrideSymbol("splat_liquid")
 		inst.AnimState:SetFinalOffset(-1)
 
-		inst.SoundEmitter:PlaySound("rifts5/lunar_boss/idle_a_LP", "idlea")
 		inst.SoundEmitter:PlaySound("rifts5/lunar_boss/idle_b_LP", "idleb")
 
 		inst:StartDomainExpansion()
@@ -1020,6 +1020,9 @@ local function fn()
 	inst.components.planardamage:SetBaseDamage(TUNING.ALTERGUARDIAN_PHASE4_LUNARRIFT_PLANAR_DAMAGE)
 
 	inst:AddComponent("explosiveresist")
+
+	inst:AddComponent("epicscare")
+	inst.components.epicscare:SetRange(ENTER_DOMAIN_RANGE)
 
 	inst:AddComponent("dpstracker")
 	inst.components.dpstracker:SetOnDpsUpdateFn(OnDpsUpdate)
