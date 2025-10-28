@@ -75,6 +75,7 @@ return{
 --fallback to speech_wilson.lua 			REVIVE_FAILED = "only_used_by_wanda",
 --fallback to speech_wilson.lua 			WARP_NO_POINTS_LEFT = "only_used_by_wanda",
 --fallback to speech_wilson.lua 			SHARD_UNAVAILABLE = "only_used_by_wanda",
+--fallback to speech_wilson.lua 			NO_TELEPORT_ZONE = "only_used_by_wanda",
 		},
 		CAST_SPELLBOOK =
 		{
@@ -707,7 +708,7 @@ return{
 	},
 
     --hallowed nights
-    ANNOUNCE_SPOOKED = "I'm seein' things!",
+    ANNOUNCE_SPOOKED = "Oof! Gross!",
 	ANNOUNCE_BRAVERY_POTION = "I got my moxie back. Now to tackle those trees.",
 	ANNOUNCE_MOONPOTION_FAILED = "Back to the drawing board.",
 
@@ -1186,6 +1187,12 @@ return{
     -- Rift 6
     ANNOUNCE_WEAPON_TOOWEAK = "I need somethin' with more umph!",
     ANNOUNCE_VAULT_TELEPORTER_DOES_NOTHING = "Hmm. Nothin' wrong on this end.",
+
+	-- Rift 6.1
+	ANNOUNCE_LIGHTSOUT_SHADOWHAND = "Hey, quit it! You ain't even supposed to be down here!",
+
+    -- Hallowed Nights 2025
+    ANNOUNCE_MUTATED_BUZZARD_ARRIVAL = "Dang buzzards! Hm, they look kinda off.", -- Mutated buzzards arrive to lurk and circle the player
 
 	BATTLECRY =
 	{
@@ -5784,7 +5791,7 @@ return{
             REVIVING = "Great. We missed our chance.", --when its mutating and being revived
         },
 
-        MUTATEDBUZZARD = {
+        MUTATEDBUZZARD_GESTALT = {
             GENERIC = "As if a regular buzzard weren't bad luck enough...", -- Generic string
             EATING_CORPSE = "I'm gonna lose my lunch soon...", -- Eating from a fresh corpse (might be from the players kill or another creatures kill)
         },
@@ -5828,6 +5835,7 @@ return{
             BROKEN = "It's missin' a part.",
             UNPOWERED = "Where's the dang ON switch?",
         },
+--fallback to speech_wilson.lua 		VAULT_TELEPORTER_UNDERCONSTRUCTION = "\"This Waymark is under development for a future update.\"",
 		VAULT_ORB = "Think I know where this goes.",
         VAULT_LOBBY_EXIT = "How bad could it be?",
 		VAULT_CHANDELIER_BROKEN = "Well that's unsafe.",
@@ -5839,6 +5847,62 @@ return{
 
         TREE_ROCK_SEED = "It's just full of potential.",
         TREE_ROCK_SAPLING = "Tough little darlin'.",
+
+        -- Rifts 6.1
+        OCEANWHIRLBIGPORTALEXIT = "Some good pickins here.", -- The flotsam pickable not the waterfall.
+
+		VAULT_TORCH =
+		{
+			GENERIC = "A fine lookin' torch.",
+			BROKEN = "The switch is busted.", --the torch still functions, just the lever is broken
+		},
+
+        CAVE_VENT_MITE =
+		{
+			DEAD = "It's dead, alright.",
+			GENERIC = "That critter is trouble!",
+			SLEEPING = "It's sleepin'.",
+            VENTING = "It ain't shy about passin' gas.", -- in the shield state and venting out gasses
+        },
+
+		--Hallowed Nights 2025
+
+		PUMPKINHAT =
+		{
+			GENERIC = "How ya doin, Jack?",
+			UNCARVED = "Didn't put on your face yet?",--can't wear it unless it's carved.
+		},
+
+        PENGUINCORPSE =
+		{
+            GENERIC  = "It ain't the end.", --witnessing the corpse
+            BURNING  = "That'll do the trick.", --when its burning
+            REVIVING = "Great. We missed our chance.", --when its mutating and being revived
+		},
+        SPIDERCORPSE =
+		{
+			GENERIC = "I prefer my spiders dead.",
+			BURNING = "Just to be sure.",
+			REVIVING = "Here we go again.",
+		},
+        SPIDERQUEENCORPSE =
+		{
+			GENERIC = "That is one big ol' dead spider.",
+			BURNING = "Nothin' comin' back from that.",
+			REVIVING = "That is so gross!",
+		},
+        MERMCORPSE =
+		{
+			GENERIC = "That merm ain't sleepin'.",
+			BURNING = "Burnin' to a crisp.",
+			REVIVING = "Dead merm walkin'!",
+		},
+        GENERIC_CORPSE = -- A generic set of lines for ANY corpse, until they get their own unique lines at least.
+        {
+            GENERIC = "Dead-er than a doornail.",
+            BURNING = "Better safe than sorry.",
+            REVIVING = "TODO",
+        },
     },
 
     DESCRIBE_GENERIC = "Incredible! I have no idea what that is.",

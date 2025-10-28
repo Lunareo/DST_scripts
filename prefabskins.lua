@@ -197,6 +197,7 @@ PREFAB_SKINS = {
 	},
 	bedroll_furry =
 	{
+		"bedroll_furry_bearger",
 		"bedroll_furry_catcoon",
 		"bedroll_furry_potato",
 		"bedroll_furry_quilt_blue_frost",
@@ -205,6 +206,7 @@ PREFAB_SKINS = {
 		"bedroll_furry_quilt_orange_honey",
 		"bedroll_furry_quilt_red_redbird",
 		"bedroll_furry_quilt_white_ivory",
+		"bedroll_furry_spider",
 	},
 	beebox =
 	{
@@ -890,6 +892,7 @@ PREFAB_SKINS = {
 	{
 		"heatrock_fantasy",
 		"heatrock_fire",
+		"heatrock_planet",
 	},
 	hivehat =
 	{
@@ -1298,6 +1301,11 @@ PREFAB_SKINS = {
 	{
 		"premiumwateringcan_koalefant",
 	},
+	pumpkinhat =
+	{
+		"pumpkinhat_2",
+		"pumpkinhat_3",
+	},
 	purpleamulet =
 	{
 		"amulet_purple_relic",
@@ -1305,6 +1313,7 @@ PREFAB_SKINS = {
 	rabbithouse =
 	{
 		"rabbithouse_carrat",
+		"rabbithouse_hallowed",
 		"rabbithouse_yule",
 	},
 	raincoat =
@@ -1396,6 +1405,7 @@ PREFAB_SKINS = {
 	resurrectionstatue =
 	{
 		"resurrectionstatue_barber",
+		"resurrectionstatue_monster",
 	},
 	resurrectionstone =
 	{
@@ -1427,6 +1437,7 @@ PREFAB_SKINS = {
 	},
 	ruinsrelic_chair =
 	{
+		"ruinsrelic_chair_tesla",
 		"ruinsrelic_chair_toilet",
 	},
 	saddle_basic =
@@ -1649,6 +1660,7 @@ PREFAB_SKINS = {
 		"tent_circus",
 		"tent_kid",
 		"tent_leaf",
+		"tent_spider",
 	},
 	tophat =
 	{
@@ -1815,11 +1827,15 @@ PREFAB_SKINS = {
 	wall_ruins =
 	{
 		"wall_ruins_thulecite",
+		"wall_ruins_thulecite2",
+		"wall_ruins_thulecite2_alt",
 		"wall_ruins_thulecite_alt",
 		"wall_ruins_victorian",
 	},
 	wall_ruins_item =
 	{
+		"wall_ruins_thulecite2item",
+		"wall_ruins_thulecite2item_alt",
 		"wall_ruins_thulecite_alt_item",
 		"wall_ruins_thuleciteitem",
 		"wall_ruins_victorianitem",

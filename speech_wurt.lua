@@ -75,6 +75,7 @@ return{
 --fallback to speech_wilson.lua 			REVIVE_FAILED = "only_used_by_wanda",
 --fallback to speech_wilson.lua 			WARP_NO_POINTS_LEFT = "only_used_by_wanda",
 --fallback to speech_wilson.lua 			SHARD_UNAVAILABLE = "only_used_by_wanda",
+--fallback to speech_wilson.lua 			NO_TELEPORT_ZONE = "only_used_by_wanda",
 		},
 		CAST_SPELLBOOK =
 		{
@@ -707,7 +708,7 @@ return{
 	},
 
     --hallowed nights
-    ANNOUNCE_SPOOKED = "G-glurp... saw something...",
+    ANNOUNCE_SPOOKED = "G-glurp... no thank you!",
 	ANNOUNCE_BRAVERY_POTION = "Me was never scared, florp!",
 	ANNOUNCE_MOONPOTION_FAILED = "Awww... nothing happen.",
 
@@ -1180,6 +1181,12 @@ return{
     -- Rift 6
     ANNOUNCE_WEAPON_TOOWEAK = "Grrr... need stronger weapon, florp!",
     ANNOUNCE_VAULT_TELEPORTER_DOES_NOTHING = "Grrr... why not work?",
+
+	-- Rift 6.1
+	ANNOUNCE_LIGHTSOUT_SHADOWHAND = "Grrr... go away, Shadowfolk!",
+
+    -- Hallowed Nights 2025
+    ANNOUNCE_MUTATED_BUZZARD_ARRIVAL = "Buzzbirds! Glurph, look weird!", -- Mutated buzzards arrive to lurk and circle the player
 
 	BATTLECRY =
 	{
@@ -5778,7 +5785,7 @@ return{
             REVIVING = "Dead bird waking up! Florp!", --when its mutating and being revived
         },
 
-        MUTATEDBUZZARD = {
+        MUTATEDBUZZARD_GESTALT = {
             GENERIC = "Dead bird even prettier.", -- Generic string
             EATING_CORPSE = "Flort! Stop that!", -- Eating from a fresh corpse (might be from the players kill or another creatures kill)
         },
@@ -5822,6 +5829,7 @@ return{
             BROKEN = "Not work. Glurgh.",
             UNPOWERED = "Grrr... why not?",
         },
+--fallback to speech_wilson.lua 		VAULT_TELEPORTER_UNDERCONSTRUCTION = "\"This Waymark is under development for a future update.\"",
 		VAULT_ORB = "Mine!",
         VAULT_LOBBY_EXIT = "Me jump!",
 		VAULT_CHANDELIER_BROKEN = "Not me, florp.",
@@ -5833,6 +5841,62 @@ return{
 
         TREE_ROCK_SEED = "A sweet baby, florpt!",
         TREE_ROCK_SAPLING = "Grow, grow grow!",
+
+        -- Rifts 6.1
+        OCEANWHIRLBIGPORTALEXIT = "Ocean poop?", -- The flotsam pickable not the waterfall.
+
+		VAULT_TORCH =
+		{
+			GENERIC = "We switch!",
+			BROKEN = "Florp! Broke!", --the torch still functions, just the lever is broken
+		},
+
+        CAVE_VENT_MITE =
+		{
+			DEAD = "Bye stink bug!",
+			GENERIC = "Stink bug!",
+			SLEEPING = "Stink bug sleeping.",
+            VENTING = "So stinky, flort!", -- in the shield state and venting out gasses
+        },
+
+		--Hallowed Nights 2025
+
+		PUMPKINHAT =
+		{
+			GENERIC = "Me carve best face.",
+			UNCARVED = "No face holes yet.",--can't wear it unless it's carved.
+		},
+
+        PENGUINCORPSE =
+		{
+            GENERIC  = "Dead bird. Glurgh.", --witnessing the corpse
+            BURNING  = "Florp! Burn bird!", --when its burning
+            REVIVING = "Dead bird waking up! Florp!", --when its mutating and being revived
+		},
+        SPIDERCORPSE =
+		{
+			GENERIC = "That Spiderfolk dead.",
+			BURNING = "Better to burn dead Spiderfolk.",
+			REVIVING = "I know should have burned dead Spiderfolk!",
+		},
+        SPIDERQUEENCORPSE =
+		{
+			GENERIC = "Mighty queen has died.",
+			BURNING = "Hope Webby-boy okay.",
+			REVIVING = "Florp. Not like this.",
+		},
+        MERMCORPSE =
+		{
+			GENERIC = "Who do this?!",
+			BURNING = "For best, my Mermfolk.",
+			REVIVING = "Better gone than like this. Glurgh.",
+		},
+        GENERIC_CORPSE = -- A generic set of lines for ANY corpse, until they get their own unique lines at least.
+        {
+            GENERIC = "It dead. But will poke to make sure.",
+            BURNING = "Bye-bye dead thing!",
+            REVIVING = "TODO",
+        },
     },
 
     DESCRIBE_GENERIC = "What that?",

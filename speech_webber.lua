@@ -75,6 +75,7 @@ return{
 --fallback to speech_wilson.lua 			REVIVE_FAILED = "only_used_by_wanda",
 --fallback to speech_wilson.lua 			WARP_NO_POINTS_LEFT = "only_used_by_wanda",
 --fallback to speech_wilson.lua 			SHARD_UNAVAILABLE = "only_used_by_wanda",
+--fallback to speech_wilson.lua 			NO_TELEPORT_ZONE = "only_used_by_wanda",
 		},
 		CAST_SPELLBOOK =
 		{
@@ -707,7 +708,7 @@ return{
 	},
 
     --hallowed nights
-    ANNOUNCE_SPOOKED = "Are we seeing things?!",
+    ANNOUNCE_SPOOKED = "Hey, that's not nice!",
 	ANNOUNCE_BRAVERY_POTION = "Hey, those trees aren't so scary anymore!",
 	ANNOUNCE_MOONPOTION_FAILED = "Whoops!",
 
@@ -1180,6 +1181,12 @@ return{
     -- Rift 6
     ANNOUNCE_WEAPON_TOOWEAK = "We need something stronger!",
     ANNOUNCE_VAULT_TELEPORTER_DOES_NOTHING = "Hey, we're still here!",
+
+	-- Rift 6.1
+	ANNOUNCE_LIGHTSOUT_SHADOWHAND = "Hey, no fair! Nobody invited that hand to play!",
+
+    -- Hallowed Nights 2025
+    ANNOUNCE_MUTATED_BUZZARD_ARRIVAL = "Buzzards! Hey, they look strange.", -- Mutated buzzards arrive to lurk and circle the player
 
 	BATTLECRY =
 	{
@@ -5576,8 +5583,8 @@ return{
         MERM_SHADOW = "We've been starting to get a little worried about Wurt...",
         MERMGUARD_SHADOW = "We've been starting to get a little worried about Wurt...",
 
-        MERM_LUNAR = "Um, Wurt? Are the merms sick?",
-        MERMGUARD_LUNAR = "Um, Wurt? Are the merms sick?",
+        MERM_LUNAR = "Are the merms sick?",
+        MERMGUARD_LUNAR = "Are the merms sick?",
 
         -- Rifts 4
 
@@ -5778,7 +5785,7 @@ return{
             REVIVING = "What's happening to it?", --when its mutating and being revived
         },
 
-        MUTATEDBUZZARD = {
+        MUTATEDBUZZARD_GESTALT = {
             GENERIC = "What do you want?", -- Generic string
             EATING_CORPSE = "Kinda makes us hungry.", -- Eating from a fresh corpse (might be from the players kill or another creatures kill)
         },
@@ -5822,6 +5829,7 @@ return{
             BROKEN = "Aw, it's broken!",
             UNPOWERED = "Why won't it turn on?",
         },
+--fallback to speech_wilson.lua 		VAULT_TELEPORTER_UNDERCONSTRUCTION = "\"This Waymark is under development for a future update.\"",
 		VAULT_ORB = "Ooh, a ball!",
         VAULT_LOBBY_EXIT = "We're first!",
 		VAULT_CHANDELIER_BROKEN = "We'll catch the next one!",
@@ -5833,6 +5841,62 @@ return{
 
         TREE_ROCK_SEED = "What a cute little seed!",
         TREE_ROCK_SAPLING = "They grow up so fast!",
+
+        -- Rifts 6.1
+        OCEANWHIRLBIGPORTALEXIT = "Let's dig for treasure!", -- The flotsam pickable not the waterfall.
+
+		VAULT_TORCH =
+		{
+			GENERIC = "We know how it works!",
+			BROKEN = "Aw, it's broken.", --the torch still functions, just the lever is broken
+		},
+
+        CAVE_VENT_MITE =
+		{
+			DEAD = "Aw.",
+			GENERIC = "We don't think it's trying to play.",
+			SLEEPING = "It's sleeping!",
+            VENTING = "How does it do that?", -- in the shield state and venting out gasses
+        },
+
+		--Hallowed Nights 2025
+
+		PUMPKINHAT =
+		{
+			GENERIC = "Aw, it's still missing some eyes.",
+			UNCARVED = "It's missing eyes and a mouth.",--can't wear it unless it's carved.
+		},
+
+        PENGUINCORPSE =
+		{
+            GENERIC  = "It's dead, we think?", --witnessing the corpse
+            BURNING  = "Mmm.", --when its burning
+            REVIVING = "We don't understand!", --when its mutating and being revived
+		},
+        SPIDERCORPSE =
+		{
+			GENERIC = "Sorry.",
+			BURNING = "Bye.",
+			REVIVING = "Oh no!",
+		},
+        SPIDERQUEENCORPSE =
+		{
+			GENERIC = "Aw, Mommy-Longlegs.",
+			BURNING = "It's going to be okay.",
+			REVIVING = "Uh-oh...",
+		},
+        MERMCORPSE =
+		{
+			GENERIC = "Maybe we could have been friends.",
+			BURNING = "We know it's the right thing to do.",
+			REVIVING = "Yikes!",
+		},
+        GENERIC_CORPSE = -- A generic set of lines for ANY corpse, until they get their own unique lines at least.
+        {
+            GENERIC = "Are we sure it's not just sleeping?",
+            BURNING = "We really hope it wasn't just sleeping.",
+            REVIVING = "TODO",
+        },
     },
 
     DESCRIBE_GENERIC = "Can we play with it?",

@@ -587,6 +587,18 @@ local fx =
         fn = FinalOffset1,
         update_while_paused = true
     },
+	{
+		name = "spawn_fx_ocean_static",
+		bank = "pond_splash_fx",
+		build = "pond_splash_fx",
+		anim = "pond_splash",
+		sound = "turnoftides/common/together/water/splash/medium",
+		fn = function(inst)
+			inst.Transform:SetScale(2, 2, 2)
+			inst.AnimState:SetFinalOffset(1)
+		end,
+		update_while_paused = true,
+	},
     --[[{
         name = "spawn_fx_large",
         bank = "spawn_fx",
@@ -3018,6 +3030,14 @@ local fx =
         sound = "meta4/turfraiser_helm/raise_turf",
     },
     {
+        name = "pull_smoke_fx",
+        bank = "pull_smoke_fx",
+        build = "pull_smoke_fx",
+        anim = "fx",
+        sound = "lunarhail_event/gestalt/moonshard_smoke_pull",
+        fn = GroundOrientation,
+    },
+    {
         name = "pillowfight_confetti_fx",
         bank = "pillowfight_confetti",
         build = "pillowfight_confetti",
@@ -3911,6 +3931,29 @@ for _, shot_type in ipairs(SHOT_TYPES) do
 		    inst.AnimState:SetFinalOffset(3)
 		end,
     })
+end
+
+local FX_SIZES = { "tiny", "small", "med", "large" }
+local FX_HEIGHTS = { "_low", "", "_high" } -- "med" height has no identifier
+for i, size in ipairs(FX_SIZES) do
+    local sound
+    if size == "tiny" or size == "small" then
+        sound = "lunarhail_event/creatures/lunar_buzzard/flame_extinguish_S"
+    elseif size == "med" then
+        sound = "lunarhail_event/creatures/lunar_buzzard/flame_extinguish_M"
+    elseif size == "large" then
+        sound = "lunarhail_event/creatures/lunar_buzzard/flame_extinguish_L"
+    end
+    for j, height in ipairs(FX_HEIGHTS) do
+        table.insert(fx, {
+            name = "lunarflame_puff_"..size..height,
+            bank = "warg_mutated_breath_fx",
+            build = "warg_mutated_breath_fx",
+            anim = "flame_puff_"..size..height,
+            sound = sound,
+            fn = FinalOffset1,
+        })
+    end
 end
 
 FinalOffset1 = nil

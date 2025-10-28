@@ -75,6 +75,7 @@ return{
 --fallback to speech_wilson.lua 			REVIVE_FAILED = "only_used_by_wanda",
 --fallback to speech_wilson.lua 			WARP_NO_POINTS_LEFT = "only_used_by_wanda",
 --fallback to speech_wilson.lua 			SHARD_UNAVAILABLE = "only_used_by_wanda",
+--fallback to speech_wilson.lua 			NO_TELEPORT_ZONE = "only_used_by_wanda",
 		},
 		CAST_SPELLBOOK =
 		{
@@ -1180,6 +1181,12 @@ return{
     -- Rift 6
     ANNOUNCE_WEAPON_TOOWEAK = "I need something... beefier!",
     ANNOUNCE_VAULT_TELEPORTER_DOES_NOTHING = "Perhaps something is lost in translation.",
+
+	-- Rift 6.1
+	ANNOUNCE_LIGHTSOUT_SHADOWHAND = "There are too many cooks in this kitchen!",
+
+    -- Hallowed Nights 2025
+    ANNOUNCE_MUTATED_BUZZARD_ARRIVAL = "Those strange and terrible birds have come to feast!", -- Mutated buzzards arrive to lurk and circle the player
 
 	BATTLECRY =
 	{
@@ -5778,7 +5785,7 @@ return{
             REVIVING = "The meat is turning!", --when its mutating and being revived
         },
 
-        MUTATEDBUZZARD = {
+        MUTATEDBUZZARD_GESTALT = {
             GENERIC = "It looks famished.", -- Generic string
             EATING_CORPSE = "Bon appetit.", -- Eating from a fresh corpse (might be from the players kill or another creatures kill)
         },
@@ -5822,6 +5829,7 @@ return{
             BROKEN = "It is in need of repair.",
             UNPOWERED = "There is no juice.",
         },
+--fallback to speech_wilson.lua 		VAULT_TELEPORTER_UNDERCONSTRUCTION = "\"This Waymark is under development for a future update.\"",
 		VAULT_ORB = "Is it a part of something?",
         VAULT_LOBBY_EXIT = "Oh dear, are we meant to jump?",
 		VAULT_CHANDELIER_BROKEN = "Lucky I was not standing under when it fell!",
@@ -5833,6 +5841,62 @@ return{
 
         TREE_ROCK_SEED = "First we plant, then we harvest.",
         TREE_ROCK_SAPLING = "A fine young sapling.",
+
+        -- Rifts 6.1
+        OCEANWHIRLBIGPORTALEXIT = "Never know what I might find!", -- The flotsam pickable not the waterfall.
+
+		VAULT_TORCH =
+		{
+			GENERIC = "Mood lighting!",
+			BROKEN = "I'm afraid the switch is broken.", --the torch still functions, just the lever is broken
+		},
+
+        CAVE_VENT_MITE =
+		{
+			DEAD = "It is dead.",
+			GENERIC = "A walking pressure cooker!",
+			SLEEPING = "Perhaps a good time to harvest?",
+            VENTING = "Most unappetizing!", -- in the shield state and venting out gasses
+        },
+
+		--Hallowed Nights 2025
+
+		PUMPKINHAT =
+		{
+			GENERIC = "One should never play with food, but wearing it is another matter.",
+			UNCARVED = "This pumpkin is in need of my knife skills.",--can't wear it unless it's carved.
+		},
+
+        PENGUINCORPSE =
+		{
+            GENERIC  = "It is about to turn.", --witnessing the corpse
+            BURNING  = "Mmm, that aroma!", --when its burning
+            REVIVING = "The meat is turning!", --when its mutating and being revived
+		},
+        SPIDERCORPSE =
+		{
+			GENERIC = "It is dead, yes?",
+			BURNING = "Burnt to perfection.",
+			REVIVING = "It makes my stomach turn.",
+		},
+        SPIDERQUEENCORPSE =
+		{
+			GENERIC = "She looks dead...",
+			BURNING = "She is developing a nice char.",
+			REVIVING = "No, thank you!",
+		},
+        MERMCORPSE =
+		{
+			GENERIC = "The poor fishmonger.",
+			BURNING = "Smoky.",
+			REVIVING = "This is terrible!",
+		},
+        GENERIC_CORPSE = -- A generic set of lines for ANY corpse, until they get their own unique lines at least.
+        {
+            GENERIC = "It has passed on.",
+            BURNING = "Flame-seared.",
+            REVIVING = "TODO",
+        },
     },
 
     DESCRIBE_GENERIC = "It is what it is...",

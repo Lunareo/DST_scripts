@@ -512,6 +512,24 @@ function ChangeToGhostPhysics(inst)
     return phys
 end
 
+function ChangeToFlyingCharacterPhysics(inst, mass, rad)
+    local phys = inst.Physics
+    if mass then
+        phys:SetMass(mass)
+        phys:SetFriction(0)
+        phys:SetDamping(5)
+    end
+    phys:SetCollisionGroup(COLLISION.FLYERS)
+	phys:SetCollisionMask(
+		TheWorld:CanFlyingCrossBarriers() and COLLISION.GROUND or COLLISION.WORLD,
+		COLLISION.FLYERS
+	)
+    if rad then
+        phys:SetCapsule(rad, 1)
+    end
+    return phys
+end
+
 function ChangeToCharacterPhysics(inst, mass, rad)
     local phys = inst.Physics
     if mass then
@@ -777,6 +795,8 @@ function MakeSnowCovered(inst)
 end
 
 function UpdateLunarHailBuildup(inst)
+    inst.updatelunarhailbuilduptask = nil
+
     local issnowcovered = TheWorld.state.issnowcovered
     local isbuildupworkable = inst.components.lunarhailbuildup and inst.components.lunarhailbuildup:IsBuildupWorkable()
     local shouldshowsymbol = issnowcovered or isbuildupworkable
@@ -807,7 +827,15 @@ end
 function MakeLunarHailBuildup(inst) -- Integrated into MakeSnowCovered.
     local lunarhailbuildup = inst:AddComponent("lunarhailbuildup")
     inst:ListenForEvent("lunarhailbuildupworkablestatechanged", OnLunarHailBuildupWorkableStateChanged)
-    inst:DoTaskInTime(0, UpdateLunarHailBuildup)
+    inst.updatelunarhailbuilduptask = inst:DoTaskInTime(0, UpdateLunarHailBuildup)
+end
+function RemoveLunarHailBuildup(inst)
+    inst:RemoveComponent("lunarhailbuildup")
+    inst:RemoveEventCallback("lunarhailbuildupworkablestatechanged", OnLunarHailBuildupWorkableStateChanged)
+    if inst.updatelunarhailbuilduptask then
+        inst.updatelunarhailbuilduptask:Cancel()
+        inst.updatelunarhailbuilduptask = nil
+    end
 end
 
 function SetLunarHailBuildupAmountSmall(inst)

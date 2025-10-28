@@ -75,6 +75,7 @@ return{
 --fallback to speech_wilson.lua 			REVIVE_FAILED = "only_used_by_wanda",
 --fallback to speech_wilson.lua 			WARP_NO_POINTS_LEFT = "only_used_by_wanda",
 --fallback to speech_wilson.lua 			SHARD_UNAVAILABLE = "only_used_by_wanda",
+--fallback to speech_wilson.lua 			NO_TELEPORT_ZONE = "only_used_by_wanda",
 		},
 		CAST_SPELLBOOK =
 		{
@@ -707,7 +708,7 @@ return{
 	},
 
     --hallowed nights
-    ANNOUNCE_SPOOKED = "WARNING: VISUAL COMPONENTS MALFUNCTIONING",
+    ANNOUNCE_SPOOKED = "FILTHY ORGANICS!",
 	ANNOUNCE_BRAVERY_POTION = "FLYING FLESHLINGS NO LONGER ACTIVATE FEAR UNITS",
 	ANNOUNCE_MOONPOTION_FAILED = "INEFFECTIVE RESULT",
 
@@ -1180,6 +1181,12 @@ return{
     -- Rift 6
     ANNOUNCE_WEAPON_TOOWEAK = "INSUFFICIENT POWER. OFFENSIVE UPGRADE REQUIRED",
     ANNOUNCE_VAULT_TELEPORTER_DOES_NOTHING = "UNIT NON-OPERATIONAL",
+
+	-- Rift 6.1
+	ANNOUNCE_LIGHTSOUT_SHADOWHAND = "WARNING: UNAUTHORIZED INTERFERANCE! SHADOW APPLICATION DETECTED!",
+
+    -- Hallowed Nights 2025
+    ANNOUNCE_MUTATED_BUZZARD_ARRIVAL = "ROTTEN FLESH EATERS INCOMING! CORRUPTION DETECTED!", -- Mutated buzzards arrive to lurk and circle the player
 
 	BATTLECRY =
 	{
@@ -5778,7 +5785,7 @@ return{
             REVIVING = "UPDATE IN PROGRESS", --when its mutating and being revived
         },
 
-        MUTATEDBUZZARD = {
+        MUTATEDBUZZARD_GESTALT = {
             GENERIC = "CODE CORRUPTED", -- Generic string
             EATING_CORPSE = "I HATE THIS UPDATE", -- Eating from a fresh corpse (might be from the players kill or another creatures kill)
         },
@@ -5822,6 +5829,7 @@ return{
             BROKEN = "NONFUNCTIONAL",
             UNPOWERED = "IT NEEDS POWER!!!",
         },
+--fallback to speech_wilson.lua 		VAULT_TELEPORTER_UNDERCONSTRUCTION = "\"This Waymark is under development for a future update.\"",
 		VAULT_ORB = "ESSENTIAL HARDWARE IDENTIFIED",
         VAULT_LOBBY_EXIT = "ESC",
 		VAULT_CHANDELIER_BROKEN = "MUST HAVE BEEN MOUNTED BY A FLESHBAG",
@@ -5833,6 +5841,62 @@ return{
 
         TREE_ROCK_SEED = "MUST BE INSTALLED",
         TREE_ROCK_SAPLING = "INSTALLED",
+
+        -- Rifts 6.1
+        OCEANWHIRLBIGPORTALEXIT = "POSSIBLE SALVAGE DETECTED", -- The flotsam pickable not the waterfall.
+
+		VAULT_TORCH =
+		{
+			GENERIC = "INTERCONNECTED LIGHTING UNIT",
+			BROKEN = "SWITCH NOT OPERATIONAL", --the torch still functions, just the lever is broken
+		},
+
+        CAVE_VENT_MITE =
+		{
+			DEAD = "HAHAHA. DEAD",
+			GENERIC = "YOU ANNOY ME. PREPARE TO DIE",
+			SLEEPING = "UNIT SLEEPING. PERFECT...",
+            VENTING = "UNIT VENTING", -- in the shield state and venting out gasses
+        },
+
+		--Hallowed Nights 2025
+
+		PUMPKINHAT =
+		{
+			GENERIC = "THIS ORGANIC MAKES A FINE MASK",
+			UNCARVED = "HUSH, ORGANIC. I WILL MAKE THIS AS PAINFUL AS POSSIBLE",--can't wear it unless it's carved.
+		},
+
+        PENGUINCORPSE =
+		{
+            GENERIC  = "HA", --witnessing the corpse
+            BURNING  = "CARBON TO STINKING CARBON", --when its burning
+            REVIVING = "UPDATE IN PROGRESS", --when its mutating and being revived
+		},
+        SPIDERCORPSE =
+		{
+			GENERIC = "DON'T EVEN TRUST DEAD ORGANICS",
+			BURNING = "BEST BUG FIX",
+			REVIVING = "RECURRING BUG",
+		},
+        SPIDERQUEENCORPSE =
+		{
+			GENERIC = "THEIR QUEEN IS DEAD. NICE",
+			BURNING = "PERMANENT BUG FIX",
+			REVIVING = "PREPARE FOR INFESTATION",
+		},
+        MERMCORPSE =
+		{
+			GENERIC = "SMELLS WORSE THAN DEAD FISH",
+			BURNING = "A GOOD IDEA",
+			REVIVING = "WHY WON'T YOU STAY DEAD?",
+		},
+        GENERIC_CORPSE = -- A generic set of lines for ANY corpse, until they get their own unique lines at least.
+        {
+            GENERIC = "A DEAD FLESHLING. POINT AND LAUGH",
+            BURNING = "REBOOT DISABLED",
+            REVIVING = "TODO",
+        },
     },
 
     DESCRIBE_GENERIC = "ERROR: UNKNOWN",

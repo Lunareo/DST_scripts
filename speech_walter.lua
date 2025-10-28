@@ -75,6 +75,7 @@ return{
 --fallback to speech_wilson.lua 			REVIVE_FAILED = "only_used_by_wanda",
 --fallback to speech_wilson.lua 			WARP_NO_POINTS_LEFT = "only_used_by_wanda",
 --fallback to speech_wilson.lua 			SHARD_UNAVAILABLE = "only_used_by_wanda",
+--fallback to speech_wilson.lua 			NO_TELEPORT_ZONE = "only_used_by_wanda",
 		},
 		CAST_SPELLBOOK =
 		{
@@ -707,7 +708,7 @@ return{
 	},
 
     --hallowed nights
-    ANNOUNCE_SPOOKED = "Is... someone there?",
+    ANNOUNCE_SPOOKED = "Yikes! That gave me quite the start!",
 	ANNOUNCE_BRAVERY_POTION = "There's nothing to be afraid of!",
 	ANNOUNCE_MOONPOTION_FAILED = "Darnit, I must've done something wrong...",
 
@@ -1222,6 +1223,12 @@ return{
     -- Rift 6
     ANNOUNCE_WEAPON_TOOWEAK = "We need something stronger, Woby!",
     ANNOUNCE_VAULT_TELEPORTER_DOES_NOTHING = "I don't know, Woby! Must be a bad connection!",
+
+	-- Rift 6.1
+	ANNOUNCE_LIGHTSOUT_SHADOWHAND = "Woby, did you see that hand? It's cheating!",
+
+    -- Hallowed Nights 2025
+    ANNOUNCE_MUTATED_BUZZARD_ARRIVAL = "Woby, look at those weird buzzards!", -- Mutated buzzards arrive to lurk and circle the player
 
 	BATTLECRY =
 	{
@@ -5820,7 +5827,7 @@ return{
             REVIVING = "Yes! I knew it!", --when its mutating and being revived
         },
 
-        MUTATEDBUZZARD = {
+        MUTATEDBUZZARD_GESTALT = {
             GENERIC = "I think it's a very bad sign.", -- Generic string
             EATING_CORPSE = "It's really feasting, Woby!", -- Eating from a fresh corpse (might be from the players kill or another creatures kill)
         },
@@ -5864,6 +5871,7 @@ return{
             BROKEN = "We have to fix it first, Woby girl!",
             UNPOWERED = "I don't think there's power.",
         },
+--fallback to speech_wilson.lua 		VAULT_TELEPORTER_UNDERCONSTRUCTION = "\"This Waymark is under development for a future update.\"",
 		VAULT_ORB = "That's not your ball, silly girl!",
         VAULT_LOBBY_EXIT = "You think this is the way out, Woby?",
 		VAULT_CHANDELIER_BROKEN = "Wonder what caused that.",
@@ -5875,6 +5883,62 @@ return{
 
         TREE_ROCK_SEED = "Where should we plant this little one, Woby?",
         TREE_ROCK_SAPLING = "It's going to grow up big and strong!",
+
+        -- Rifts 6.1
+        OCEANWHIRLBIGPORTALEXIT = "You smell anything in there, Woby?", -- The flotsam pickable not the waterfall.
+
+		VAULT_TORCH =
+		{
+			GENERIC = "There's a neat little switch that turns it on and off!",
+			BROKEN = "The switch looks broken.", --the torch still functions, just the lever is broken
+		},
+
+        CAVE_VENT_MITE =
+		{
+			DEAD = "Yup. It's dead.",
+			GENERIC = "Careful Woby! It's gassy.",
+			SLEEPING = "Shh... don't wake it, Woby.",
+            VENTING = "It's blowing off steam! Get it, Woby?", -- in the shield state and venting out gasses
+        },
+
+		--Hallowed Nights 2025
+
+		PUMPKINHAT =
+		{
+			GENERIC = "I can't wait to scare someone!",
+			UNCARVED = "Let's face it, Woby... This pumpkin doesn't have one! Get it?",--can't wear it unless it's carved.
+		},
+
+        PENGUINCORPSE =
+		{
+            GENERIC  = "Stay away from it, Woby!", --witnessing the corpse
+            BURNING  = "Smells kinda yummy.", --when its burning
+            REVIVING = "Yes! I knew it!", --when its mutating and being revived
+		},
+        SPIDERCORPSE =
+		{
+			GENERIC = "It looks dead, Woby. But be careful.",
+			BURNING = "That's a good habit.",
+			REVIVING = "We forgot to burn it. Oh well!",
+		},
+        SPIDERQUEENCORPSE =
+		{
+			GENERIC = "Rest in peace, Your Majesty.",
+			BURNING = "We did the right thing, Woby.",
+			REVIVING = "We should have burned it. Oops.",
+		},
+        MERMCORPSE =
+		{
+			GENERIC = "Yikes, that smells fishy.",
+			BURNING = "It reminds me of barbequed fish.",
+			REVIVING = "It smells extra fishy!",
+		},
+        GENERIC_CORPSE = -- A generic set of lines for ANY corpse, until they get their own unique lines at least.
+        {
+            GENERIC = "That's just how things go in the wilderness, sometimes.",
+            BURNING = "We gotta make sure it doesn't rise from the dead!",
+            REVIVING = "TODO",
+        },
     },
 
     DESCRIBE_GENERIC = "That sure is a mystery!",

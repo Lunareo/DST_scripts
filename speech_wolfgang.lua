@@ -75,6 +75,7 @@ return{
 --fallback to speech_wilson.lua 			REVIVE_FAILED = "only_used_by_wanda",
 --fallback to speech_wilson.lua 			WARP_NO_POINTS_LEFT = "only_used_by_wanda",
 --fallback to speech_wilson.lua 			SHARD_UNAVAILABLE = "only_used_by_wanda",
+--fallback to speech_wilson.lua 			NO_TELEPORT_ZONE = "only_used_by_wanda",
 		},
 		CAST_SPELLBOOK =
 		{
@@ -708,7 +709,7 @@ return{
 	},
 
     --hallowed nights
-    ANNOUNCE_SPOOKED = "Wolfgang's eyes is playing tricky!",
+    ANNOUNCE_SPOOKED = "Is bad surprise!",
 	ANNOUNCE_BRAVERY_POTION = "Wolfgang is brave! Not scared of spooky tree!",
 	ANNOUNCE_MOONPOTION_FAILED = "Wolfgang expected something to happen.",
 
@@ -1181,6 +1182,12 @@ return{
     -- Rift 6
     ANNOUNCE_WEAPON_TOOWEAK = "Gah! Wolfgang needs something mightier!",
     ANNOUNCE_VAULT_TELEPORTER_DOES_NOTHING = "Wolfgang confused.",
+
+	-- Rift 6.1
+	ANNOUNCE_LIGHTSOUT_SHADOWHAND = "Get out of here, big shadow hand!",
+
+    -- Hallowed Nights 2025
+    ANNOUNCE_MUTATED_BUZZARD_ARRIVAL = "Go away, weird buzzard! Wolfgang still alive!", -- Mutated buzzards arrive to lurk and circle the player
 
 	BATTLECRY =
 	{
@@ -5779,7 +5786,7 @@ return{
             REVIVING = "Oh, no.", --when its mutating and being revived
         },
 
-        MUTATEDBUZZARD = {
+        MUTATEDBUZZARD_GESTALT = {
             GENERIC = "Is very bad luck.", -- Generic string
             EATING_CORPSE = "Is gross, but Wolfgang can't look away.", -- Eating from a fresh corpse (might be from the players kill or another creatures kill)
         },
@@ -5823,6 +5830,7 @@ return{
             BROKEN = "Maybe we leave it like this.",
             UNPOWERED = "It lacks power!",
         },
+--fallback to speech_wilson.lua 		VAULT_TELEPORTER_UNDERCONSTRUCTION = "\"This Waymark is under development for a future update.\"",
 		VAULT_ORB = "It is not ball for fun.",
         VAULT_LOBBY_EXIT = "Maybe Wolfgang jump last to make sure nobody left behind.",
 		VAULT_CHANDELIER_BROKEN = "That belong on ceiling.",
@@ -5834,6 +5842,62 @@ return{
 
         TREE_ROCK_SEED = "Hello little baby seed. Wolfgang plant you somewhere nice.",
         TREE_ROCK_SAPLING = "One day, you grow big and mighty like Wolfgang!",
+
+        -- Rifts 6.1
+        OCEANWHIRLBIGPORTALEXIT = "Any goodies for Wolfgang in sea garbage pile?", -- The flotsam pickable not the waterfall.
+
+		VAULT_TORCH =
+		{
+			GENERIC = "Oh good, bright light for Wolfgang.",
+			BROKEN = "It is broken?", --the torch still functions, just the lever is broken
+		},
+
+        CAVE_VENT_MITE =
+		{
+			DEAD = "Gassy bug is dead.",
+			GENERIC = "Is mitey, not mighty!",
+			SLEEPING = "Shh, gassy bug is sleeping.",
+            VENTING = "Is bad gas!", -- in the shield state and venting out gasses
+        },
+
+		--Hallowed Nights 2025
+
+		PUMPKINHAT =
+		{
+			GENERIC = "Wolfgang wear scary pumpkin face! Tricky kids beware!",
+			UNCARVED = "No face? How will it scare the little babies?",--can't wear it unless it's carved.
+		},
+
+        PENGUINCORPSE =
+		{
+            GENERIC  = "Is not personal.", --witnessing the corpse
+            BURNING  = "Better this way.", --when its burning
+            REVIVING = "This not funny!", --when its mutating and being revived
+		},
+        SPIDERCORPSE =
+		{
+			GENERIC = "Wolfgang prefer dead spider.",
+			BURNING = "Good idea.",
+			REVIVING = "Don't come back, spider!",
+		},
+        SPIDERQUEENCORPSE =
+		{
+			GENERIC = "Ha! Is no match for Mighty Wolfgang!",
+			BURNING = "Burn, bug-house! Burn!",
+			REVIVING = "Oh no. This bad. This very bad.",
+		},
+        MERMCORPSE =
+		{
+			GENERIC = "Bye bye, fish man!",
+			BURNING = "Smell kind of delicious.",
+			REVIVING = "Is rotten fish man!",
+		},
+        GENERIC_CORPSE = -- A generic set of lines for ANY corpse, until they get their own unique lines at least.
+        {
+            GENERIC = "Is dead. Too bad.",
+            BURNING = "Wolfgang feel safer now.",
+            REVIVING = "TODO",
+        },
     },
 
     DESCRIBE_GENERIC = "What is this thing?",

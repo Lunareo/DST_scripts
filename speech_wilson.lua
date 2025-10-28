@@ -85,6 +85,7 @@ return {
 			REVIVE_FAILED = "only_used_by_wanda",
 			WARP_NO_POINTS_LEFT = "only_used_by_wanda",
 			SHARD_UNAVAILABLE = "only_used_by_wanda",
+			NO_TELEPORT_ZONE = "only_used_by_wanda",
 		},
 		CAST_SPELLBOOK =
 		{
@@ -717,7 +718,7 @@ return {
 	},
 
     --hallowed nights
-    ANNOUNCE_SPOOKED = "Did you see that?!",
+    ANNOUNCE_SPOOKED = "Ah!",
 	ANNOUNCE_BRAVERY_POTION = "Those trees don't seem so spooky anymore.",
 	ANNOUNCE_MOONPOTION_FAILED = "Perhaps I didn't let it steep long enough...",
 
@@ -1143,7 +1144,7 @@ return {
     ANNOUNCE_OTTERBOAT_OUTOFSHALLOWS = "I've got a sinking feeling this should've stayed in the shallows.",
     ANNOUNCE_OTTERBOAT_DENBROKEN = "Getting rid of that den might have started a chain reaction...",
 
-    ANNOUNCE_GATHER_MERM = "Must be a Merm thing.",
+    ANNOUNCE_GATHER_MERM = "Must be a merm thing.",
 
     -- rifts 4
     ANNOUNCE_EXIT_GELBLOB = "I was drowning in that... stuff!",
@@ -1190,6 +1191,12 @@ return {
     -- Rift 6
     ANNOUNCE_WEAPON_TOOWEAK = "I need something stronger!",
     ANNOUNCE_VAULT_TELEPORTER_DOES_NOTHING = "Maybe there's something wrong on the other side?",
+
+	-- Rift 6.1
+	ANNOUNCE_LIGHTSOUT_SHADOWHAND = "Wait a minute, what is that doing down here?",
+
+    -- Hallowed Nights 2025
+    ANNOUNCE_MUTATED_BUZZARD_ARRIVAL = "Buzz off! We're not dead yet! Wait a minute, these ones are mutated.", -- Mutated buzzards arrive to lurk and circle the player
 
 	BATTLECRY =
 	{
@@ -5788,7 +5795,7 @@ return {
             REVIVING = "It's becoming a new species!", --when its mutating and being revived
         },
 
-        MUTATEDBUZZARD = {
+        MUTATEDBUZZARD_GESTALT = {
             GENERIC = "I admire its dead-ication.", -- Generic string
             EATING_CORPSE = "Don't mind me, just carrion eating.", -- Eating from a fresh corpse (might be from the players kill or another creatures kill)
         },
@@ -5844,6 +5851,62 @@ return {
 
         TREE_ROCK_SEED = "It's a seed.",
         TREE_ROCK_SAPLING = "It had a rocky start.",
+
+        -- Rifts 6.1
+        OCEANWHIRLBIGPORTALEXIT = "I sea debris.", -- The flotsam pickable not the waterfall.
+
+		VAULT_TORCH =
+		{
+			GENERIC = "Is that a light switch?",
+			BROKEN = "The switch looks broken.", --the torch still functions, just the lever is broken
+		},
+
+        CAVE_VENT_MITE =
+		{
+			DEAD = "Out of gas!",
+			GENERIC = "What mite it be?",
+			SLEEPING = "Careful, it mite wake up.",
+            VENTING = "It's fuming mad!", -- in the shield state and venting out gasses
+        },
+
+		--Hallowed Nights 2025
+
+		PUMPKINHAT =
+		{
+			GENERIC = "That's a hollow expression.",
+			UNCARVED = "It's no gourd to wear without a face.",--can't wear it unless it's carved.
+		},
+
+        PENGUINCORPSE =
+		{
+            GENERIC  = "I call fowl.", --witnessing the corpse
+            BURNING  = "That's what I call a firebird.", --when its burning
+            REVIVING = "It's becoming a new species!", --when its mutating and being revived
+		},
+        SPIDERCORPSE =
+		{
+			GENERIC = "Ewwww!",
+			BURNING = "Much better.",
+			REVIVING = "This is all wrong.",
+		},
+        SPIDERQUEENCORPSE =
+		{
+			GENERIC = "Eww! I feel sick.",
+			BURNING = "Much better.",
+			REVIVING = "This is not good.",
+		},
+        MERMCORPSE =
+		{
+			GENERIC = "A merm has died.",
+			BURNING = "That smell is the worst.",
+			REVIVING = "Dead merm waking!",
+		},
+        GENERIC_CORPSE = -- A generic set of lines for ANY corpse, until they get their own unique lines at least.
+        {
+            GENERIC = "It's definitely dead.",
+            BURNING = "No coming back from that.",
+            REVIVING = "TODO",
+        },
     },
 
     DESCRIBE_GENERIC = "It's a... thing.",

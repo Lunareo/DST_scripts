@@ -708,7 +708,7 @@ return{
 	},
 
     --hallowed nights
-    ANNOUNCE_SPOOKED = "Ack! Leave me alone!!",
+    ANNOUNCE_SPOOKED = "Ack! I don't need this in my life!!",
 	ANNOUNCE_BRAVERY_POTION = "It doesn't seem quite as scary this time around.",
 	ANNOUNCE_MOONPOTION_FAILED = "Well that didn't work out like I hoped.",
 
@@ -1181,6 +1181,12 @@ return{
     -- Rift 6
     ANNOUNCE_WEAPON_TOOWEAK = "Oh botheration! I'll need something stronger than this...",
     ANNOUNCE_VAULT_TELEPORTER_DOES_NOTHING = "Now this is rather annoying.",
+
+	-- Rift 6.1
+	ANNOUNCE_LIGHTSOUT_SHADOWHAND = "That's strange. You don't belong down here.",
+
+    -- Hallowed Nights 2025
+    ANNOUNCE_MUTATED_BUZZARD_ARRIVAL = "I know what those are... nothing right about them.", -- Mutated buzzards arrive to lurk and circle the player
 
 	BATTLECRY =
 	{
@@ -5779,7 +5785,7 @@ return{
             REVIVING = "I hate this part.", --when its mutating and being revived
         },
 
-        MUTATEDBUZZARD = {
+        MUTATEDBUZZARD_GESTALT = {
             GENERIC = "This is not good.", -- Generic string
             EATING_CORPSE = "I see it hasn't lost its appetite.", -- Eating from a fresh corpse (might be from the players kill or another creatures kill)
         },
@@ -5823,17 +5829,74 @@ return{
             BROKEN = "It's plain to see it's broken.",
             UNPOWERED = "I knew I forgot something.",
         },
+--fallback to speech_wilson.lua 		VAULT_TELEPORTER_UNDERCONSTRUCTION = "\"This Waymark is under development for a future update.\"",
 		VAULT_ORB = "This is the functional piece.",
         VAULT_LOBBY_EXIT = "Sure, why not?",
 		VAULT_CHANDELIER_BROKEN = "I'm surprised it stayed up that long in the first place.",
 
-		ANCIENT_HUSK = "Some scenes I'd rather forget.",
+		ANCIENT_HUSK = "How awful.",
 		MASK_ANCIENT_HANDMAIDHAT = "It reminds me of someone with authority.",
 		MASK_ANCIENT_ARCHITECTHAT = "Looks rather familiar.",
 		MASK_ANCIENT_MASONHAT = "A mask like this is earned through years of hard labor.",
 
         TREE_ROCK_SEED = "I could plant this anywhere.",
         TREE_ROCK_SAPLING = "It has its whole life ahead of it.",
+
+        -- Rifts 6.1
+        OCEANWHIRLBIGPORTALEXIT = "Not how I want to spend my time.", -- The flotsam pickable not the waterfall.
+
+		VAULT_TORCH =
+		{
+			GENERIC = "Is there an order to this.",
+			BROKEN = "It's broken.", --the torch still functions, just the lever is broken
+		},
+
+        CAVE_VENT_MITE =
+		{
+			DEAD = "That's the end of that.",
+			GENERIC = "I was hoping not to see or smell you again.",
+			SLEEPING = "That's one way to pass the time.",
+            VENTING = "Disgusting.", -- in the shield state and venting out gasses
+        },
+
+		--Hallowed Nights 2025
+
+		PUMPKINHAT =
+		{
+			GENERIC = "Yes, that will no nicely.",
+			UNCARVED = "Pumpkin carving reminds me of a simpler time.",--can't wear it unless it's carved.
+		},
+
+        PENGUINCORPSE =
+		{
+            GENERIC  = "I know what comes next.", --witnessing the corpse
+            BURNING  = "This should put an end to it.", --when its burning
+            REVIVING = "I hate this part.", --when its mutating and being revived
+		},
+        SPIDERCORPSE =
+		{
+			GENERIC = "I have a bad feeling about it.",
+			BURNING = "A wise choice.",
+			REVIVING = "This was predictable.",
+		},
+        SPIDERQUEENCORPSE =
+		{
+			GENERIC = "We should burn it, if I recall correctly.",
+			BURNING = "I hope I never see you again.",
+			REVIVING = "A new cycle begins.",
+		},
+        MERMCORPSE =
+		{
+			GENERIC = "That merm needs to be burned.",
+			BURNING = "It's the right thing to do.",
+			REVIVING = "What a terrible fate for that poor merm.",
+		},
+        GENERIC_CORPSE = -- A generic set of lines for ANY corpse, until they get their own unique lines at least.
+        {
+            GENERIC = "I'd better burn that thing before it's too late.",
+            BURNING = "One less potential reanimated corpse to worry about.",
+            REVIVING = "TODO",
+        },
     },
 
     DESCRIBE_GENERIC = "A very particular something or other.",

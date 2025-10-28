@@ -75,6 +75,7 @@ return{
 --fallback to speech_wilson.lua 			REVIVE_FAILED = "only_used_by_wanda",
 --fallback to speech_wilson.lua 			WARP_NO_POINTS_LEFT = "only_used_by_wanda",
 --fallback to speech_wilson.lua 			SHARD_UNAVAILABLE = "only_used_by_wanda",
+--fallback to speech_wilson.lua 			NO_TELEPORT_ZONE = "only_used_by_wanda",
 		},
 		CAST_SPELLBOOK =
 		{
@@ -708,7 +709,7 @@ return{
 	},
 
     --hallowed nights
-    ANNOUNCE_SPOOKED = "You see that, Lucy?",
+    ANNOUNCE_SPOOKED = "Oh geez!",
 	ANNOUNCE_BRAVERY_POTION = "Glad that's over. Never thought I'd be scared of trees.",
 	ANNOUNCE_MOONPOTION_FAILED = "Consider yourself lucky, eh?",
 
@@ -1181,6 +1182,12 @@ return{
     -- Rift 6
     ANNOUNCE_WEAPON_TOOWEAK = "We need something stronger, eh?",
     ANNOUNCE_VAULT_TELEPORTER_DOES_NOTHING = "Well do you have a better idea, Lucy?",
+
+	-- Rift 6.1
+	ANNOUNCE_LIGHTSOUT_SHADOWHAND = "You see that, Luce? That creepy hand snuffed a torch!",
+
+    -- Hallowed Nights 2025
+    ANNOUNCE_MUTATED_BUZZARD_ARRIVAL = "Those buzzards look different to you, Luce?", -- Mutated buzzards arrive to lurk and circle the player
 
 	BATTLECRY =
 	{
@@ -5577,7 +5584,7 @@ return{
         MERM_SHADOW = "That lil' Merm really worked you to death, eh?",
         MERMGUARD_SHADOW = "There's no quit in these fellas.",
 
-        MERM_LUNAR = "What the heck is she feedin' you guys?",
+        MERM_LUNAR = "What the heck is happening to you guys?",
         MERMGUARD_LUNAR = "Those eyes have seen some things.",
 
         -- Rifts 4
@@ -5779,7 +5786,7 @@ return{
             REVIVING = "This is the worst.", --when its mutating and being revived
         },
 
-        MUTATEDBUZZARD = {
+        MUTATEDBUZZARD_GESTALT = {
             GENERIC = "Oh man. That's bad. So bad.", -- Generic string
             EATING_CORPSE = "We need to get outta here, Luce.", -- Eating from a fresh corpse (might be from the players kill or another creatures kill)
         },
@@ -5823,6 +5830,7 @@ return{
             BROKEN = "Looks pretty broken.",
             UNPOWERED = "I don't think it's turned on.",
         },
+--fallback to speech_wilson.lua 		VAULT_TELEPORTER_UNDERCONSTRUCTION = "\"This Waymark is under development for a future update.\"",
 		VAULT_ORB = "Wonder what it does.",
         VAULT_LOBBY_EXIT = "It should be fine?",
 		VAULT_CHANDELIER_BROKEN = "Better keep careful around here.",
@@ -5834,6 +5842,62 @@ return{
 
         TREE_ROCK_SEED = "It makes me a little emotional.",
         TREE_ROCK_SAPLING = "I can't wait to see it full grown...",
+
+        -- Rifts 6.1
+        OCEANWHIRLBIGPORTALEXIT = "Anything good in there?", -- The flotsam pickable not the waterfall.
+
+		VAULT_TORCH =
+		{
+			GENERIC = "That's a big oil lamp.",
+			BROKEN = "It's broken.", --the torch still functions, just the lever is broken
+		},
+
+        CAVE_VENT_MITE =
+		{
+			DEAD = "That's a dead bug.",
+			GENERIC = "Stay away from me, bug!",
+			SLEEPING = "We should get it while it's sleeping.",
+            VENTING = "Watch out for the gas!", -- in the shield state and venting out gasses
+        },
+
+		--Hallowed Nights 2025
+
+		PUMPKINHAT =
+		{
+			GENERIC = "You know why I didn't ask you, Lucy. You would've butchered it.",
+			UNCARVED = "This should be fun.",--can't wear it unless it's carved.
+		},
+
+        PENGUINCORPSE =
+		{
+            GENERIC  = "I still don't trust it.", --witnessing the corpse
+            BURNING  = "Finally.", --when its burning
+            REVIVING = "This is the worst.", --when its mutating and being revived
+		},
+        SPIDERCORPSE =
+		{
+			GENERIC = "Yuck.",
+			BURNING = "It's making me sick.",
+			REVIVING = "Why is this happening?",
+		},
+        SPIDERQUEENCORPSE =
+		{
+			GENERIC = "That's nasty.",
+			BURNING = "I can't look away!",
+			REVIVING = "Noooooo!",
+		},
+        MERMCORPSE =
+		{
+			GENERIC = "That's unfortunate.",
+			BURNING = "It's the safest thing to do.",
+			REVIVING = "I was afraid that might happen!",
+		},
+        GENERIC_CORPSE = -- A generic set of lines for ANY corpse, until they get their own unique lines at least.
+        {
+            GENERIC = "It's dead alright.",
+            BURNING = "Better to do it now than regret it later, eh?",
+            REVIVING = "TODO",
+        },
     },
 
     DESCRIBE_GENERIC = "What's that, eh?",

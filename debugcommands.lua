@@ -1213,7 +1213,6 @@ end
 local function AddTileNodeIdsForArea(world_map, node_index, left, top, width, height)
 	for x = left, left + width do
 		for y = top, top + height do
-            SpawnPrefab("researchlab").Transform:SetPosition(world_map:GetTileCenterPoint(x, y))
 			world_map:SetTileNodeId(x, y, node_index)
 		end
 	end
@@ -2417,7 +2416,7 @@ local function Scrapbook_DefineAnimation(t)
         anim = "kit"
     elseif t.prefab == "lunar_forge_kit" then
         anim = "kit"
-    elseif t:HasTag("tree") and not t:HasTag("ancienttree") and not table.contains({"livingtree", "marsh_tree", "oceantree", "driftwood_tall", "driftwood_small1", "mushtree_tall_webbed"}, t.prefab) then
+    elseif t:HasTag("tree") and not t:HasAnyTag("ancienttree", "rock_tree") and not table.contains({"livingtree", "marsh_tree", "oceantree", "driftwood_tall", "driftwood_small1", "mushtree_tall_webbed"}, t.prefab) then
         anim = "idle_tall"
     elseif t.winter_ornamentid and t:HasTag("lightbattery") then
         anim = t.winter_ornamentid .. "_on"
@@ -3910,6 +3909,74 @@ function d_drawworldroute(routename)
     TheWorld.debug_wandertopologyvisuals = wandertopologyvisuals
 end
 
+local function GetAvgCenterOfTask(task_name, manager)
+    local num = 0
+    local x, y = 0, 0
+    --
+    for i, id in ipairs(TheWorld.topology.ids) do
+        local node = TheWorld.topology.nodes[i]
+        if id:find(task_name) and (manager == nil or manager:Debug_IsNodeValidForMigration(id)) then
+            num = num + 1
+            x, y = x + node.cent[1], y + node.cent[2]
+        end
+    end
+    --
+    return num ~= 0 and Vector3(x / num, 0, y / num) or nil
+end
+function d_drawworldbirdmigration()
+    if not TheWorld then
+        return
+    end
+    local worldmigrationvisuals = TheWorld.debug_worldmigrationvisuals
+    if worldmigrationvisuals then
+        for _, v in ipairs(worldmigrationvisuals) do
+            if v:IsValid() then
+                v:Remove()
+            end
+        end
+        worldmigrationvisuals = nil
+    else
+        worldmigrationvisuals = {}
+
+        local manager = TheWorld.components.mutatedbirdmanager
+        local migrationmap = manager and manager:Debug_GetMigrationMap()
+        if not migrationmap then
+            return
+        end
+
+        local migrationpopulations = manager:Debug_GetMigrationPopulations()
+
+        for task, neighbors in pairs(migrationmap) do
+            local pos = GetAvgCenterOfTask(task, manager)
+            worldtopology_createent(worldmigrationvisuals, pos.x, pos.z, "oceanwhirlbigportal.png", task)
+
+            local i = 0
+            for bird_type, populations in pairs(migrationpopulations) do
+                i = i + 1
+                for task_name, data in pairs(populations) do
+                    if task_name == task then
+                        local str = data.current.." "..bird_type
+                        worldtopology_createent(worldmigrationvisuals, pos.x + i * 5, pos.z + i * 5, "greenmooneye.png", str)
+                        break
+                    end
+                end
+            end
+
+            for i, neighbor in pairs(neighbors) do
+                local neighborpos = GetAvgCenterOfTask(neighbor, manager)
+
+                local distmod = math.ceil(math.sqrt(distsq(pos.x, pos.z, neighborpos.x, neighborpos.z)) / 8)
+                for j = 0, distmod - 1 do
+                    local x = Lerp(pos.x, neighborpos.x, j / distmod)
+                    local z = Lerp(pos.z, neighborpos.z, j / distmod)
+                    worldtopology_createent(worldmigrationvisuals, x, z, "purplemooneye.png", nil)
+                end
+            end
+        end
+    end
+    TheWorld.debug_worldmigrationvisuals = worldmigrationvisuals
+end
+
 function d_printworldroutetime(routename, speed, bonus)
     if not TheWorld then
         return
@@ -4186,7 +4253,7 @@ function d_testbirdattack()
 
     local bird = SpawnPrefab("mutatedbird")
     bird.Transform:SetPosition(x + math.cos(angle) * radius, 15, z - math.sin(angle) * radius)
-    bird.sg:GoToState("glide_attack_in", player)
+    bird.sg:GoToState("swoop_attack_in", player)
 end
 
 function d_testbirdclearhail()
@@ -4270,4 +4337,37 @@ function d_spawnvaultactors()
     wilson = SpawnPrefab("wilson")
     wilson.Transform:SetPosition(c_findnext("charlie_stage").Transform:GetWorldPosition())
     wilson.components.inventory:Equip(SpawnPrefab("mask_ancient_architecthat"))
+end
+
+function d_debug_arc_attack_hitbox(arc_span, forward_offset, arc_radius, lifetime)
+    local inst = c_select(c_sel(), true)
+
+    DebugArcAttackHitBox(inst, arc_span, forward_offset, arc_radius, lifetime)
+end
+
+function d_lunarmutation(corpseprefab, buildid)
+    local corpse = c_spawn(corpseprefab)
+    corpse:SetNonGestaltCorpse()
+
+    if buildid then
+        corpse:SetAltBuild(buildid)
+        corpse:SetAltBank(buildid)
+    end
+end
+
+function d_gestaltmutation(corpseprefab, buildid)
+    local corpse = c_spawn(corpseprefab)
+    corpse:SetGestaltCorpse()
+
+    if buildid then
+        corpse:SetAltBuild(buildid)
+        corpse:SetAltBank(buildid)
+    end
+end
+
+function d_mutatedbuzzardcircler()
+    local buzzard = SpawnPrefab("circlingbuzzard_lunar")
+    buzzard.components.mutatedbuzzardcircler:SetCircleTarget(ThePlayer)
+    buzzard.components.mutatedbuzzardcircler:Start()
+    return buzzard
 end

@@ -1502,7 +1502,7 @@ STRINGS =
         TORCH = "Torch",
         SEEDS = "Seeds",
         HOUND = "Hound",
-		HOUNDCORPSE = "Hound",
+		--HOUNDCORPSE = "Hound", -- NOTE: Deprecated.
         FIREHOUND = "Red Hound",
         SEEDS_COOKED = "Toasted Seeds",
         SILK = "Silk",
@@ -4362,7 +4362,7 @@ STRINGS =
         FENCE_ELECTRIC_ITEM = "T.I.N.G.L.E. Node",
 
         MUTATEDBIRD = "Bright-Beaked Bird",
-        MUTATEDBUZZARD = "Crystal-Crested Buzzard",
+        MUTATEDBUZZARD_GESTALT = "Crystal-Crested Buzzard",
 
         -- Names for missed scrapbook entries
         WAVEYJONES = "Wavey Jones",
@@ -4395,6 +4395,20 @@ STRINGS =
 
         CAVE_FERN_WITHERED = "Withered Fern",
         FLOWER_CAVE_WITHERED = "Withered Light Flower",
+
+        -- Rifts 6.1
+
+        OCEANWHIRLBIGPORTAL = "Giant Whirlpool",
+        OCEANWHIRLBIGPORTALEXIT = "Ocean Detritus", -- The flotsam pickable not the waterfall.
+
+		VAULT_TORCH = "Flummoxing Flame",
+
+        CAVE_VENT_MITE = "Geothermite",
+
+		-- Hallowed Nights 2025
+
+		PUMPKINHAT = "Faceless Pumpkin",
+		PUMPKINHAT_CARVED = "Pumpkin Head",
 	},
 
     NAME_DETAIL_EXTENTION =
@@ -5554,6 +5568,8 @@ STRINGS =
         FENCE_ELECTRIC = "A shockingly effective way to contain yourself... or others.",
         FENCE_ELECTRIC_ITEM = "A shockingly effective way to contain yourself... or others.",
 
+		-- Halloween 2025
+		PUMPKINHAT = "It's only natural to wear a pumpkin on your head after you've carved a face into it.",
     },
 
     -- MAXWELL_TEST = {"Say pal, you don't look so good.", "You better find something to eat before night comes!"},
@@ -9524,6 +9540,14 @@ STRINGS.UI =
 		CARVE = "Carve",
 	},
 
+	PUMPKINHAT_CARVING_POPUP =
+	{
+		RANDOMIZE = "Randomize",
+		REYE = "Eye",
+		LEYE = "Other Eye",
+		MOUTH = "Mouth",
+	},
+
 	SNOWMAN_DECORATING_POPUP =
 	{
 		MAX_DECOR = "You have reached the maximum number of decorations!",
@@ -9600,8 +9624,12 @@ STRINGS.UI =
         MINIMAPZOOMCURSOR = "Zoom Cursor Focus:",
         VIBRATION = "Vibration:",
         CONTROLLER_AUDIO = "Controller Audio:",
-        UI_HAPTICS = "Interface Haptics:",
-        UI_VIBRATION = "Interface Vibration:",
+        HAPTICS_STRENGTH = "Effect Strength:",
+        HAPTICS_EFFECTS_UI = "Interface Effects:",
+        HAPTICS_EFFECTS_DANGER = "Danger Effects:",
+        HAPTICS_EFFECTS_PLAYER = "Player Effects:",
+        HAPTICS_EFFECTS_ENVIRO = "Environmental Effects:",
+        HAPTICS_EFFECTS_BOSS = "Boss Effects:",
         WATHGRITHRFONT = "Wigfrid's Umlauts:",
         WALTERCAMERA = "Campfire Camera:",
         BOATCAMERA = "Seafaring Camera:",
@@ -9655,7 +9683,8 @@ STRINGS.UI =
         DYNAMICCONTENT_ENABLE = "Re-enable Dynamic Content",
         OFFLINE_MODE_TITLE = "Offline Mode",
         OFFLINE_MODE_BODY = "Your selection is not available in offline mode. Please log in and try again.",
-        KLEI_ID_PREFIX = "Klei ID: ",
+        KLEI_ID_PREFIX = "Klei ID",
+        VERSION = "Version",
 		COMMANDWHEEL = "Social Menu Movement:",
 
 		INTRO_MOVIE = "Intro Movie",
@@ -9707,8 +9736,12 @@ STRINGS.UI =
             VIBRATION = "Make your controller vibrate at key gameplay moments.",
 			VIBRATION_WIRELESS = "Enable vibration of your wireless controller at key gameplay moments.",
             CONTROLLER_AUDIO = "Enable audio from your wireless controller at key gameplay moments.",
-            UI_HAPTICS = "Enable vibration and/or audio from your wireless controller when interacting with the user interface.",
-            UI_VIBRATION = "Enable vibration when interacting with the user interface.",
+            HAPTICS_STRENGTH = "Adjust the strength of haptic effects.",
+            HAPTICS_EFFECTS_UI = "Toggle haptic effects from interacting with the user interface.",
+            HAPTICS_EFFECTS_DANGER = "Toggle haptic effects when your character is in danger.",
+            HAPTICS_EFFECTS_PLAYER = "Toggle haptic effects from your character's actions.",
+            HAPTICS_EFFECTS_BOSS = "Toggle haptic effects from boss enemy actions.",
+            HAPTICS_EFFECTS_ENVIRO = "Toggle haptic effects from the environment.",
             FX = "Change how loud things are in the world.",
             MUSIC = "Tone up or down the musical fanfare in your adventures.",
             AMBIENT = "The environment makes noise too, luckily you can control how loudly it does.",
@@ -10950,6 +10983,15 @@ STRINGS.UI =
 
         OCEAN_OTTERDENS = "Marotter Dens",
         OTTERS_SETTING = "Marotters",
+
+        MUTATED_BIRDS = "Mutated Birds",
+        MUTATED_MERM = "Mutated Merms",
+        MUTATED_SPIDERQUEEN = "Shattered Spider Holes",
+        MUTATED_BIRD_GESTALT = "Bright-Beaked Birds",
+        MUTATED_BUZZARD_GESTALT = "Crystal-Crested Buzzards",
+        MUTATED_DEERCLOPS = "Crystal Deerclops",
+        MUTATED_BEARGER = "Armored Bearger",
+        MUTATED_WARG = "Possessed Vargs",
 		-- End of world customization strings
     },
 
@@ -12658,6 +12700,8 @@ STRINGS.UI =
         FAILED_NOPERMISSIONS_NOCHOICE = "I understand",
 
         MYSTERYBOX_DISABLE = "You must be logged in to access the Treasury.",
+
+        NOT_AVAILABLE_OFFLINE = "This feature is not available in offline mode."
     },
 
     BEARDSCREEN =
@@ -14378,6 +14422,7 @@ STRINGS.UI =
         CHOICEEVENTS = "Events",
         CHOICESURVIVORS = "Survivors",
         CHOICEGIANTS = "Giants",
+        CHOICELUNARMUTATIONS = "Lunar Mutations",
 
         WORLDSETTINGS_RESOURCEREGROWTH = "Resource Regrowth",
         WORLDSETTINGS_PORTALRESOURCES = "Unnatural Portal Resources",
@@ -15801,6 +15846,7 @@ STRINGS.VAULT_RUNE = {
 	LORE2 = "\"Through the Keystone, all kin and kind shall fall.\"",
 	LORE3 = "\"Let the cursed Keystone never cross this threshold.\"",
 	PUZZLE1 = "\"Paths are taken but once. Leap wisely, tarry not, or the abyss claims all.\"",
+	PUZZLE2 = "\"Only when all torches burn shall the way be revealed.\"",
 }
 STRINGS.NIGHTMARE_OVERGROWTH = {
     LINE_1 = "\"Forsaken wretches of the one who turned away.\"",
@@ -17655,6 +17701,27 @@ STRINGS.SCRAPBOOK = {
 
         FENCE_ELECTRIC = "\"Transdermal Induction Neurological Galvanic Learning Experience\" Uses electrolunetic technology to deliver shocks to conductive entities.\n\nOnce toggled, the T.I.N.G.L.E. node will search for another nearby node to link to, establishing an electric field between the two.\n\nNo physical harm is done (mental harm is up for debate). Most subjects will flee away after the brief shock.\n\nThe tester is recommended to use insulative gear to avoid this special learning experience!",
         FENCE_ELECTRIC_ITEM = "\"Transdermal Induction Neurological Galvanic Learning Experience\" Uses electrolunetic technology to deliver shocks to conductive entities.\n\nOnce toggled, the T.I.N.G.L.E. node will search for another nearby node to link to, establishing an electric field between the two.\n\nNo physical harm is done (mental harm is up for debate). Most subjects will flee away after the brief shock.\n\nThe tester is recommended to use insulative gear to avoid this special learning experience!",
+
+        -- Rifts 6 and Rifts6.1
+        TREE_ROCK = "The vines uproot more than boulders, depending on where they are planted.",
+        SHADOWTHRALL_CENTIPEDE_HEAD = "Dense and unyielding, it will take great effort to crack its shell.",
+        CAVE_VENT_ROCK = "These vents can billow out more than mere heat.",
+        CAVE_VENT_MITE = "The Fumarole's cycle begins with the Geothermite.",
+        OCEANWHIRLBIGPORTAL = "Hypnotically swirling, ever-drawing, it swallows all caught within its eye.\nHighly destructive to boats and structures alike.",
+        OCEANWHIRLBIGPORTALEXIT = "A heap of sludge. Best dig in!",
+        VAULT_LOBBY_EXIT = "The longer you gaze, the stronger the urge to leap.",
+        VAULT_TELEPORTER = "Flashy transportation. Keep your gaze on the floor if you feel dizzy or disoriented.",
+        VAULT_ORB = "A focus of intent for the Sanctum Waymark, drawing together those beyond.",
+        VAULT_RUNE = "Engraved markings, enduring through eternity. Perhaps decipherable.",
+        VAULT_TORCH = "The flame is calming. If only it would stay lit.",
+        ABYSSPILLAR_MINION = "They block your path. Are they following a pattern?",
+        ABYSSPILLAR_TRIAL = "The urge to pull this lever is... unusually strong.",
+        MASK_ANCIENT_HANDMAIDHAT = "Costume piece used in stage plays.\nShe did what was necessary in service of her Queen.",
+        MASK_ANCIENT_ARCHITECTHAT = "Costume piece used in stage plays.\nIs it better to face the bitter truth or embrace sweet ignorance?",
+        MASK_ANCIENT_MASONHAT = "Costume piece used in stage plays.\nBetrayal begets the darkest of curses.",
+        PLAYBILL_THE_DOLL = "Charlie's version of events.",
+        PLAYBILL_THE_VEIL = "Shady promotional material.",
+        PLAYBILL_THE_VAULT = "A grim testimony from the past, and a foreshadowing of what awaits.",
     },
 
     -- Full name: "{name} Scrapbook Page"

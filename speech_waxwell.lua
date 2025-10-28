@@ -75,6 +75,7 @@ return{
 --fallback to speech_wilson.lua 			REVIVE_FAILED = "only_used_by_wanda",
 --fallback to speech_wilson.lua 			WARP_NO_POINTS_LEFT = "only_used_by_wanda",
 --fallback to speech_wilson.lua 			SHARD_UNAVAILABLE = "only_used_by_wanda",
+--fallback to speech_wilson.lua 			NO_TELEPORT_ZONE = "only_used_by_wanda",
 		},
 		CAST_SPELLBOOK =
 		{
@@ -707,7 +708,7 @@ return{
 	},
 
     --hallowed nights
-    ANNOUNCE_SPOOKED = "Quite an expert illusion.",
+    ANNOUNCE_SPOOKED = "Disgusting!",
 	ANNOUNCE_BRAVERY_POTION = "I was never really scared of those trees anyhow.",
 	ANNOUNCE_MOONPOTION_FAILED = "How disappointing.",
 
@@ -1180,6 +1181,12 @@ return{
     -- Rift 6
     ANNOUNCE_WEAPON_TOOWEAK = "Pathetic! I need something stronger!",
     ANNOUNCE_VAULT_TELEPORTER_DOES_NOTHING = "It's always something with that moon magic.",
+
+	-- Rift 6.1
+	ANNOUNCE_LIGHTSOUT_SHADOWHAND = "Hmm... could you be... trying to help?",
+
+    -- Hallowed Nights 2025
+    ANNOUNCE_MUTATED_BUZZARD_ARRIVAL = "I hate buzzards, but these are... wrong.", -- Mutated buzzards arrive to lurk and circle the player
 
 	BATTLECRY =
 	{
@@ -5759,7 +5766,7 @@ return{
 
         FENCE_ELECTRIC = {
             LINKED = "I don't trust the power source.",      --NOTE: the fence post is fully linked to two other posts
-            GENERIC = "Perhaps its best left alone.",           --NOTE: no links or electricity, just boring ol fence post
+            GENERIC = "Perhaps it's best left alone.",           --NOTE: no links or electricity, just boring ol fence post
         },
         FENCE_ELECTRIC_ITEM = "I don't like it.",
 
@@ -5778,7 +5785,7 @@ return{
             REVIVING = "Absolutely grotesque.", --when its mutating and being revived
         },
 
-        MUTATEDBUZZARD = {
+        MUTATEDBUZZARD_GESTALT = {
             GENERIC = "It looks hungry.", -- Generic string
             EATING_CORPSE = "Chew with your beak closed!", -- Eating from a fresh corpse (might be from the players kill or another creatures kill)
         },
@@ -5822,6 +5829,7 @@ return{
             BROKEN = "Obviously broken.",
             UNPOWERED = "Figures.",
         },
+--fallback to speech_wilson.lua 		VAULT_TELEPORTER_UNDERCONSTRUCTION = "\"This Waymark is under development for a future update.\"",
 		VAULT_ORB = "It's part of a thing.",
         VAULT_LOBBY_EXIT = "If I must.",
 		VAULT_CHANDELIER_BROKEN = "This place is falling apart.",
@@ -5833,6 +5841,62 @@ return{
 
         TREE_ROCK_SEED = "Do I have to dig in the dirt? With my hands?",
         TREE_ROCK_SAPLING = "These things take forever.",
+
+        -- Rifts 6.1
+        OCEANWHIRLBIGPORTALEXIT = "I'd rather not pick through that.", -- The flotsam pickable not the waterfall.
+
+		VAULT_TORCH =
+		{
+			GENERIC = "On or off? Make up your mind.",
+			BROKEN = "Of course it's broken.", --the torch still functions, just the lever is broken
+		},
+
+        CAVE_VENT_MITE =
+		{
+			DEAD = "Great.",
+			GENERIC = "Leave me alone!",
+			SLEEPING = "Quickly, while it sleeps.",
+            VENTING = "Ugh, I think I swallowed some.", -- in the shield state and venting out gasses
+        },
+
+		--Hallowed Nights 2025
+
+		PUMPKINHAT =
+		{
+			GENERIC = "Nice face.",
+			UNCARVED = "Without a face, it's just a pumpkin.",--can't wear it unless it's carved.
+		},
+
+        PENGUINCORPSE =
+		{
+            GENERIC  = "Yuck.", --witnessing the corpse
+            BURNING  = "Good riddance.", --when its burning
+            REVIVING = "Absolutely grotesque.", --when its mutating and being revived
+		},
+        SPIDERCORPSE =
+		{
+			GENERIC = "Hope it stays dead.",
+			BURNING = "Good idea.",
+			REVIVING = "Vile thing is coming back for more!",
+		},
+        SPIDERQUEENCORPSE =
+		{
+			GENERIC = "I hope she stays dead.",
+			BURNING = "That's a relief.",
+			REVIVING = "I was worried about this.",
+		},
+        MERMCORPSE =
+		{
+			GENERIC = "Smells like rotten fish.",
+			BURNING = "I didn't think it could smell worse.",
+			REVIVING = "Of course you don't even know how to stay dead.",
+		},
+        GENERIC_CORPSE = -- A generic set of lines for ANY corpse, until they get their own unique lines at least.
+        {
+            GENERIC = "Apologies, Higgsbury. I thought that stench was coming from you.",
+            BURNING = "The pragmatic approach.",
+            REVIVING = "TODO",
+        },
     },
 
     DESCRIBE_GENERIC = "You tell me.",
