@@ -195,6 +195,18 @@ local function MakeBefriendable(inst)
 	inst.TryBefriendChess = TryBefriendChess
 end
 
+local function sgTrySetBefriendable(inst)
+	if inst.TryBefriendChess then
+		inst:AddTag("befriendable_clockwork")
+	end
+end
+
+local function sgTryClearBefriendable(inst)
+	if inst.TryBefriendChess and not inst.sg.statemem.keepbefriendable then
+		inst:RemoveTag("befriendable_clockwork")
+	end
+end
+
 --------------------------------------------------------------------------
 
 local function CancelRegen(inst)
@@ -325,6 +337,8 @@ return {
     OnAttacked = OnAttacked,
 	OnNewCombatTarget = OnNewCombatTarget,
 	MakeBefriendable = MakeBefriendable,
+	sgTrySetBefriendable = sgTrySetBefriendable,
+	sgTryClearBefriendable = sgTryClearBefriendable,
 	MakeHealthRegen = MakeHealthRegen,
 	WaitForTrader = WaitForTrader,
 }

@@ -75,7 +75,8 @@ local function DoCollideShake(inst)
 end
 
 local function oncollide(inst, other)
-	if other and not other.isplayer and other:IsValid() and
+	if inst.sg and inst.sg:HasStateTag("running_collides") and
+		other and not other.isplayer and other:IsValid() and
 		other.components.workable and
 		other.components.workable:CanBeWorked() and
 		other.components.workable:GetWorkAction() ~= ACTIONS.NET and
@@ -171,7 +172,8 @@ local function MakeRook(name, common_postinit, master_postinit, _assets, _prefab
 		inst.entity:SetPristine()
 
 		if not TheWorld.ismastersim then
-			inst:ListenForEvent(0, InitGroundFx_Client)
+			inst:DoTaskInTime(0, InitGroundFx_Client)
+
 			return inst
 		end
 

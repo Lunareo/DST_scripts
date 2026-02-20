@@ -8,7 +8,7 @@ local function ResetInUse(inst)
 end
 
 local function OnUsedOnChess(inst, target, doer)
-	if target.TryBefriendChess and target:TryBefriendChess(doer) then
+	if target.TryBefriendChess and target:HasTag("befriendable_clockwork") and target:TryBefriendChess(doer) then
 		if target.components.health then
 			target.components.health:SetPercent(1)
 		end
@@ -26,7 +26,7 @@ local function OnUsedOnChess(inst, target, doer)
 end
 
 local function UseableTargetedItem_ValidTarget(inst, target, doer)
-	if not target:HasTag("chess") or target:HasTag("gilded_knight") then
+	if not target:HasTag("befriendable_clockwork") then
 		return false
 	end
 	local follower = target.replica.follower

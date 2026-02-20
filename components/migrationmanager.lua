@@ -79,6 +79,10 @@ local _migrationpopulations = {}
 --[[ Private member functions ]]
 --------------------------------------------------------------------------
 
+local function CreatePlayerDataTable(player)
+    return { player = player, migration_node = nil }
+end
+
 local function CreateMigrationMapTable()
     return { weight = 0, neighbours = {} }
 end
@@ -161,9 +165,7 @@ local function InitializeMigrationMapFromTopology()
         _migrationmap = {}
         for i, id in ipairs(_world.topology.ids) do
             local searchednodes = {} -- ["Task:0:Room"] = true
-            if not IsNodeLinker(id) then
-                RecurseNeighbours(_world.topology.nodes[i], searchednodes, GetNodeFromTopologyID(id))
-            end
+            RecurseNeighbours(_world.topology.nodes[i], searchednodes, GetNodeFromTopologyID(id))
         end
     end
 
@@ -215,7 +217,8 @@ end
 --------------------------------------------------------------------------
 
 local function OnPlayerJoined(src, player)
-    _activeplayers[player] = self:GetMigrationNodeAtInst(player)
+    _activeplayers[player] = CreatePlayerDataTable(player)
+    _activeplayers[player].migration_node = self:GetMigrationNodeAtInst(player)
 end
 
 local function OnPlayerLeft(src, player)
@@ -260,7 +263,7 @@ end
 
 -- Getters
 
-function self:GetPlayerLocationList()
+function self:GetPlayerMigrationData()
     return _activeplayers
 end
 
@@ -410,6 +413,7 @@ end
 function self:EnterMigration(migrator_type, ent) -- decides whether to join a existing group or create a new one at position
     local node = self:GetMigrationNodeAtInst(ent)
     if not node then
+        ent:Remove() -- TODO maybe we should enter the closest valid node?
         return
     end
 
@@ -475,8 +479,8 @@ end
 --------------------------------------------------------------------------
 
 function self:DoUpdatePlayerLocations()
-    for player in pairs(_activeplayers) do
-        _activeplayers[player] = self:GetMigrationNodeAtInst(player)
+    for player, data in pairs(_activeplayers) do
+        data.migration_node = self:GetMigrationNodeAtInst(player)
     end
 end
 
