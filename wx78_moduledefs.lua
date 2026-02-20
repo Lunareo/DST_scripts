@@ -129,16 +129,26 @@ AddCreatureScanDataDefinition("oceanhorror", "maxsanity", 3)
 AddCreatureScanDataDefinition("ruinsnightmare", "maxsanity", 8)
 
 ---------------------------------------------------------------
+local function movespeed_updaterunspeed(wx)
+    if not wx._runspeedoverridden then
+        wx.components.locomotor.runspeed = TUNING.WILSON_RUN_SPEED * (1 + TUNING.WX78_MOVESPEED_CHIPBOOSTS[wx._movespeed_chips + 1])
+    end
+end
+
 local function movespeed_activate(inst, wx)
     wx._movespeed_chips = (wx._movespeed_chips or 0) + 1
+    wx.movespeed_updaterunspeed = movespeed_updaterunspeed
 
-    wx.components.locomotor.runspeed = TUNING.WILSON_RUN_SPEED * (1 + TUNING.WX78_MOVESPEED_CHIPBOOSTS[wx._movespeed_chips + 1])
+    movespeed_updaterunspeed(wx)
 end
 
 local function movespeed_deactivate(inst, wx)
     wx._movespeed_chips = math.max(0, wx._movespeed_chips - 1)
+    if wx._movespeed_chips == 0 then
+        wx.movespeed_updaterunspeed = nil
+    end
 
-    wx.components.locomotor.runspeed = TUNING.WILSON_RUN_SPEED * (1 + TUNING.WX78_MOVESPEED_CHIPBOOSTS[wx._movespeed_chips + 1])
+    movespeed_updaterunspeed(wx)
 end
 
 local MOVESPEED_MODULE_DATA =
@@ -307,7 +317,7 @@ local function taser_onblockedorattacked(wx, data, inst)
 				damage_mult = TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * data.attacker:GetWetMultiplier()
             end
 
-			data.attacker:PushEvent("electrocute", { attacker = wx, stimuli = "electric" })
+			data.attacker:PushEventImmediate("electrocute", { attacker = wx, stimuli = "electric", noresist = true })
             data.attacker.components.combat:GetAttacked(wx, damage_mult * TUNING.WX78_TASERDAMAGE, nil, "electric")
         end
     end
