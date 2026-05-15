@@ -141,6 +141,7 @@ end
 local function Launch(inst, x, y, z)
 	inst.Follower:StopFollowing()
 	inst.entity:SetParent(nil)
+	inst.Physics:SetActive(true)
 	inst.Physics:Teleport(x, y, z)
 	inst.Physics:SetMotorVel(0, -15, 0)
 	inst.AnimState:SetScale(1, 1)
@@ -154,6 +155,7 @@ end
 local function AttachTo(inst, parent)
 	inst.weapon = parent
 	inst.entity:SetParent(parent.entity)
+	inst.Physics:SetActive(false)
 	inst.Follower:FollowSymbol(parent.GUID, "light")
 	inst.SoundEmitter:PlaySound("rifts5/wagdrone_rolling/beamlp_a", "charging")
 end
@@ -253,6 +255,7 @@ local function wx78_drone_zap_common_postinit(inst)
 	inst:SetPrefabNameOverride("wx78_drone_zap") --for death announce
 end
 
+-- Keep in sync with wx78_possessedbodybrain::WX78_DRONE_ZAP_TARGET_NOTAGS
 local WX78_DRONE_ZAP_TARGET_TAGS = { "_combat" }
 local WX78_DRONE_ZAP_TARGET_NOTAGS_PVP = { "INLIMBO", "flight", "invisible", "notarget", "noattack", "ghost", "playerghost", "shadowthrall", "shadow", "shadowcreature", "shadowminion", "shadowchesspiece", "brightmare", "brightmareboss", "electric_connector", "wall", "companion" }
 local WX78_DRONE_ZAP_TARGET_NOTAGS = shallowcopy(WX78_DRONE_ZAP_TARGET_NOTAGS_PVP, { "player" })
@@ -261,15 +264,28 @@ local function wx78_drone_zap_FindTargets(inst, x, z, radius)
 end
 
 local function wx78_drone_zap_CheckTarget(inst, target)
-	return not (inst.caster and inst.caster.components.combat and inst.caster.components.combat:IsAlly(target))
+	return inst.caster == nil
+		or (	inst.caster:IsValid() and
+				not (inst.caster.components.combat and inst.caster.components.combat:IsAlly(target))
+			)
 end
 
 local function wx78_drone_zap_OnAttackedTarget(inst, target)
-	if target and target:IsValid() and
-		inst.caster and inst.caster:IsValid() and
-		inst.caster:IsNear(target, TUNING.SKILLS.WX78.ZAPDRONE_AGGRO_RANGE)
-	then
-		target:PushEvent("attacked", { attacker = inst.caster, damage = 0, weapon = inst.weapon })
+	if target and target:IsValid() and inst.caster and inst.caster:IsValid() then
+		local dsq = inst.caster:GetDistanceSqToInst(target)
+		if dsq < TUNING.SKILLS.WX78.ZAPDRONE_SHARE_TARGET_RANGE * TUNING.SKILLS.WX78.ZAPDRONE_SHARE_TARGET_RANGE then
+			table.insert(inst._actiondata, { action = ACTIONS.ATTACK, target = target })
+		end
+		if dsq < TUNING.SKILLS.WX78.ZAPDRONE_AGGRO_RANGE * TUNING.SKILLS.WX78.ZAPDRONE_AGGRO_RANGE then
+			target:PushEvent("attacked", { attacker = inst.caster, damage = 0, weapon = inst.weapon })
+		end
+	end
+end
+
+local function wx78_drone_zap_OnUpdate(inst, dt)
+	if #inst._actiondata > 0 and inst.caster and inst.caster:IsValid() then
+		inst.caster:PushEvent("ms_wx_actiondata", inst._actiondata)
+		inst._actiondata = {}
 	end
 end
 
@@ -278,9 +294,13 @@ local function wx78_drone_zap_master_postinit(inst)
 	inst.insulated_dmg_mult = TUNING.SKILLS.WX78.ZAPDRONE_INSULATED_DAMAGE_MULT
 	inst.components.combat:SetDefaultDamage(inst.damage)
 
+	inst._actiondata = {}
+
 	inst._FindTargets = wx78_drone_zap_FindTargets
 	inst._CheckTarget = wx78_drone_zap_CheckTarget
 	inst._OnAttackedTarget = wx78_drone_zap_OnAttackedTarget
+
+	inst.components.updatelooper:AddOnUpdateFn(wx78_drone_zap_OnUpdate)
 end
 
 --------------------------------------------------------------------------

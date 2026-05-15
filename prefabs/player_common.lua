@@ -910,9 +910,13 @@ local function EnableMovementPrediction(inst, enable)
                 inst.components.locomotor.is_prediction_enabled = true
                 --This is unfortunate but it doesn't seem like you can send an rpc on the first
                 --frame when a character is spawned
-                inst:DoTaskInTime(0, function(inst)
-                    SendRPCToServer(RPC.SetMovementPredictionEnabled, true)
-                    end)
+				if inst._setpredictionrpctask then
+					inst._setpredictionrpctask:Cancel()
+				end
+				inst._setpredictionrpctask = inst:DoTaskInTime(0, function(inst)
+					inst._setpredictionrpctask = nil
+					SendRPCToServer(RPC.SetMovementPredictionEnabled, true)
+				end)
             end
         elseif inst.components.locomotor ~= nil then
             inst:RemoveEventCallback("cancelmovementprediction", OnCancelMovementPrediction)
@@ -928,9 +932,13 @@ local function EnableMovementPrediction(inst, enable)
             print("Movement prediction disabled")
             --This is unfortunate but it doesn't seem like you can send an rpc on the first
             --frame when a character is spawned
-            inst:DoTaskInTime(0, function(inst)
-                SendRPCToServer(RPC.SetMovementPredictionEnabled, false)
-                end)
+			if inst._setpredictionrpctask then
+				inst._setpredictionrpctask:Cancel()
+			end
+			inst._setpredictionrpctask = inst:DoTaskInTime(0, function(inst)
+				inst._setpredictionrpctask = nil
+				SendRPCToServer(RPC.SetMovementPredictionEnabled, false)
+			end)
         end
     end
 end
@@ -1054,6 +1062,10 @@ function fns.CommonSeamlessPlayerSwap(inst)
     inst.userid = ""
     if inst.components.playercontroller ~= nil then
         RemovePlayerComponents(inst)
+		if inst._setpredictionrpctask then
+			inst._setpredictionrpctask:Cancel()
+			inst._setpredictionrpctask = nil
+		end
     end
     inst:PushEvent("seamlessplayerswap")
 end
@@ -1096,6 +1108,15 @@ end
 
 function fns.MasterSeamlessPlayerSwapTarget(inst)
     fns.CommonSeamlessPlayerSwapTarget(inst)
+end
+
+function fns.OnPlayerReroll(inst)
+    if inst.components.socketholder then
+        local items = inst.components.socketholder:UnsocketEverything()
+        for _, item in ipairs(items) do
+            Launch2(item, inst, 1, 1, 0.2, 0, 4)
+        end
+    end
 end
 
 function fns.EnableLoadingProtection(inst)
@@ -1664,6 +1685,60 @@ fns.SetBathingPoolCamera = function(inst, target)
 	end
 end
 
+
+--------------------------------------------------------------------------
+
+-- Only Wx needs the effect block currently, but we can easily move the netvars to player_classified if we need in the future.
+local function SetFreezingEffectBlockModifier(inst, source, boolval, key)
+    if inst._freezingeffectblock == nil then
+        inst._freezingeffectblock = SourceModifierList(inst, false, SourceModifierList.boolean)
+    end
+    local old = inst._freezingeffectblock:Get()
+    inst._freezingeffectblock:SetModifier(source, boolval, source)
+    local newval = inst._freezingeffectblock:Get()
+    if old ~= newval then
+        inst:PushEvent("updateiceover")
+    end
+    if inst.wx78_classified ~= nil then
+        inst.wx78_classified.freezeeffectblocked:set(newval)
+    end
+end
+
+local function SetOverheatingEffectBlockModifier(inst, source, boolval, key)
+    if inst._overheatingeffectblock == nil then
+        inst._overheatingeffectblock = SourceModifierList(inst, false, SourceModifierList.boolean)
+    end
+    local old = inst._overheatingeffectblock:Get()
+    inst._overheatingeffectblock:SetModifier(source, boolval, source)
+    local newval = inst._overheatingeffectblock:Get()
+    if old ~= newval then
+        inst:PushEvent("updateheatover")
+    end
+    if inst.wx78_classified ~= nil then
+        inst.wx78_classified.overheateffectblocked:set(newval)
+    end
+end
+
+local function IsFreezingEffectBlocked(inst)
+    if inst._freezingeffectblock ~= nil then
+        return inst._freezingeffectblock:Get()
+    elseif inst.wx78_classified ~= nil then
+        return inst.wx78_classified.freezeeffectblocked:value()
+    end
+
+    return false
+end
+
+local function IsOverheatingEffectBlocked(inst)
+    if inst._overheatingeffectblock ~= nil then
+        return inst._overheatingeffectblock:Get()
+    elseif inst.wx78_classified ~= nil then
+        return inst.wx78_classified.overheateffectblocked:value()
+    end
+
+    return false
+end
+
 --------------------------------------------------------------------------
 
 fns.ApplyScale = function(inst, source, scale)
@@ -2230,6 +2305,10 @@ local function MakePlayerCharacter(name, customprefabs, customassets, common_pos
         inst.GetSeeableTilePercent = ex_fns.GetSeeableTilePercent
         inst.MakeGenericCommander = ex_fns.MakeGenericCommander
 		inst.CommandWheelAllowsGameplay = ex_fns.CommandWheelAllowsGameplay
+		inst.SetFreezingEffectBlockModifier = SetFreezingEffectBlockModifier
+		inst.SetOverheatingEffectBlockModifier = SetOverheatingEffectBlockModifier
+        inst.IsFreezingEffectBlocked = IsFreezingEffectBlocked
+		inst.IsOverheatingEffectBlocked = IsOverheatingEffectBlocked
 	end
 
     local max_range = TUNING.MAX_INDICATOR_RANGE * 1.5
@@ -2355,13 +2434,7 @@ end
         inst.AnimState:PlayAnimation("idle")
 
         ex_fns.SetupBaseSymbolVisibility(inst)
-
-        inst.AnimState:OverrideSymbol("fx_wipe", "wilson_fx", "fx_wipe")
-        inst.AnimState:OverrideSymbol("fx_liquid", "wilson_fx", "fx_liquid")
-        inst.AnimState:OverrideSymbol("shadow_hands", "shadow_hands", "shadow_hands")
-        inst.AnimState:OverrideSymbol("snap_fx", "player_actions_fishing_ocean_new", "snap_fx")
-        inst.AnimState:OverrideSymbol("chalice_swap_comp", "chalice_swap", "chalice_swap_comp")
-
+        ex_fns.SetupOverrideSymbols(inst)
         ex_fns.SetupOverrideBuilds(inst)
 
         inst.DynamicShadow:SetSize(1.3, .6)
@@ -2417,6 +2490,7 @@ end
         inst:ListenForEvent("local_seamlessplayerswaptarget", fns.LocalSeamlessPlayerSwapTarget)
         inst:ListenForEvent("master_seamlessplayerswap", fns.MasterSeamlessPlayerSwap)
         inst:ListenForEvent("master_seamlessplayerswaptarget", fns.MasterSeamlessPlayerSwapTarget)
+        inst:ListenForEvent("ms_playerreroll", fns.OnPlayerReroll)
 
         inst:AddComponent("talker")
         inst.components.talker:SetOffsetFn(GetTalkerOffset)

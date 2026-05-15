@@ -41,7 +41,7 @@ local function OnDropped(inst)
 end
 
 local function OnPicked(inst, picker, loot)
-    inst.SoundEmitter:PlaySound("qol1/wagstaff_ruins/rummagepile_pst") -- pickable.picksound only works for something that gives pickable loot the usuable way
+    inst.SoundEmitter:PlaySound("qol1/wagstaff_ruins/rummagepile_pst") -- pickable.picksound only works for something that gives pickable loot the usual way
 
 	local loots = inst.components.container:GetAllItems()
 	if #loots > 0 then
@@ -94,7 +94,14 @@ local function SetPowered(inst, powered)
 	end
 end
 
+local function PreserverRateFn(inst, item)
+	local owner = inst.components.inventoryitem.owner
+	return owner ~= nil and owner.components.preserver ~= nil and owner.components.preserver:GetPerishRateMultiplier(item)
+end
+
 local function ValidateOnLoad(inst)
+	inst:RemoveComponent("updatelooper")
+
 	local owner = inst.components.inventoryitem.owner
 	if owner == nil then
 		return --valid!
@@ -106,6 +113,10 @@ local function ValidateOnLoad(inst)
 	local minslot = inventory:GetNumSlots() - (maxcount - 1)
 	local slot = inventory:GetItemSlot(inst)
 	if slot and slot >= minslot then
+		--now check for powered
+		maxcount = owner._stacksize_active_modules or 0
+		minslot = inventory:GetNumSlots() - (maxcount - 1)
+		inst:SetPowered(slot >= minslot)
 		return --valid!
 	end
 
@@ -116,7 +127,8 @@ local function ValidateOnLoad(inst)
 end
 
 local function OnLoad(inst)--, data, ents)
-	inst:DoTaskInTime(0, ValidateOnLoad)
+	inst:AddComponent("updatelooper")
+	inst.components.updatelooper:AddPostUpdateFn(ValidateOnLoad)
 end
 
 local function GetStatus(inst)--, viewer)
@@ -180,8 +192,8 @@ local function fn()
 	inst.components.pickable.onpickedfn = OnPicked
 	inst.components.pickable:SetUp(nil, 0)
 
-    -- inst:AddComponent("preserver")
-    -- inst.components.preserver:SetPerishRateMultiplier(TUNING.BEARGERFUR_SACK_PRESERVER_RATE)
+    inst:AddComponent("preserver")
+    inst.components.preserver:SetPerishRateMultiplier(PreserverRateFn)
 
     MakeHauntableLaunchAndDropFirstItem(inst)
 
@@ -191,4 +203,4 @@ local function fn()
     return inst
 end
 
-return Prefab("wx78_inventorycontainer", fn, assets, prefabs)
+return Prefab("wx78_inventorycontainer", fn, assets)

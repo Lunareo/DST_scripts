@@ -5,11 +5,8 @@ local SGWX78Common = {}
 --------------------------------------------------------
 -- WX-78 common states
 
-local WX_SPIN_PICKABLE_TAGS = { "plant", "lichen", "oceanvine", "kelp" }
 local WX_SPIN_CANT_TAGS = { "INLIMBO", "NOCLICK", "FX", "decor", "intense", "companion", "flight", "invisible", "notarget", "noattack", "wall" }
-local WX_SPIN_ONEOF_TAGS = ConcatArrays({ "CHOP_workable", "MINE_workable", "LunarBuildup", "_combat", --[["pickable",]] }, WX_SPIN_PICKABLE_TAGS)
-
-SGWX78Common.WX_SPIN_PICKABLE_TAGS = WX_SPIN_PICKABLE_TAGS
+local WX_SPIN_ONEOF_TAGS = ConcatArrays({ "CHOP_workable", "MINE_workable", "LunarBuildup", "_combat", --[["pickable",]] }, HARVESTABLE_PLANT_TARGET_TAGS)
 
 local function GetLocalAnalogXY(inst)
 	if inst.HUD and inst.components.playercontroller then
@@ -59,6 +56,9 @@ local function DoWX78Screech(inst)
                 v:DoTaskInTime(math.random(), DelayedWX78ScreechWake)
             end
             v.components.hauntable:Panic(TUNING.WX78_SCREECH_PANIC_TIME)
+			if v.brain then
+				v.brain:ForceUpdate()
+			end
         end
     end
 end
@@ -69,12 +69,15 @@ local function UpdateWX78ShieldingDefense(inst)
 end
 
 local function WX78ShieldOnAttacked(inst, data)
-	local damage = data and data.damage or TUNING.WX78_SHIELDING_TOTAL_DAMAGE * 0.5 -- Fallback in case of mods.
+	-- wx78shieldingdamage can be nil if we exited on an attacked event push, so this will still push too.
+	if inst.sg.mem.wx78shieldingdamage ~= nil then
+		local damage = data and data.damage or TUNING.WX78_SHIELDING_TOTAL_DAMAGE * 0.5 -- Fallback in case of mods.
 
-	inst.sg.mem.wx78shieldingdamage = inst.sg.mem.wx78shieldingdamage + damage
-	if inst.sg.mem.wx78shieldingdamage >= TUNING.WX78_SHIELDING_TOTAL_DAMAGE then
-		inst.sg.mem.wx78shieldingdamage = 0
-        inst.sg:GoToState("wx_shield_pst")
+		inst.sg.mem.wx78shieldingdamage = inst.sg.mem.wx78shieldingdamage + damage
+		if inst.sg.mem.wx78shieldingdamage >= TUNING.WX78_SHIELDING_TOTAL_DAMAGE then
+			inst.sg.mem.wx78shieldingdamage = 0
+    	    inst.sg:GoToState("wx_shield_pst")
+		end
 	end
 end
 
@@ -128,6 +131,10 @@ local function ApplyWX78ShieldingDefense(inst)
 
 		inst.sg.mem.wx78shieldtaunttask = inst:DoPeriodicTask(TAUNT_PERIOD, TauntCreatures, 0)
 
+		if inst.components.inventory ~= nil then
+			inst.components.inventory.thiefproof = true
+		end
+
         -- This event listener isn't really necessacary anymore. But left just in case.
 		inst:ListenForEvent("refreshwxshielddefense", UpdateWX78ShieldingDefense)
 		UpdateWX78ShieldingDefense(inst)
@@ -146,15 +153,19 @@ local function ClearWX78ShieldingDefense(inst)
 
         if inst.components.wx78_abilitycooldowns
             and (dt >= TUNING.WX78_SHIELDING_MIN_TIME_COOLDOWN or inst.sg.mem.wx78shieldhit) then
-            inst.components.wx78_abilitycooldowns:RestartAbilityCooldown("wxshielding", TUNING.WX78_SHIELDING_COOLDOWN)
+            inst.components.wx78_abilitycooldowns:RestartAbilityCooldown("shielding", TUNING.WX78_SHIELDING_COOLDOWN)
         end
 
-        if inst.sg.statemem.wxshieldingrestoremass ~= nil then
-            inst.Physics:SetMass(inst.sg.statemem.wxshieldingrestoremass)
+        if inst.sg.mem.wxshieldingrestoremass ~= nil then
+            inst.Physics:SetMass(inst.sg.mem.wxshieldingrestoremass)
 		end
 		if inst.sg.mem.wx78shieldtaunttask ~= nil then
 			inst.sg.mem.wx78shieldtaunttask:Cancel()
 			inst.sg.mem.wx78shieldtaunttask = nil
+		end
+
+		if inst.components.inventory ~= nil then
+			inst.components.inventory.thiefproof = nil
 		end
         inst.sg.mem.wx78shieldingdamage = nil
         inst.sg.mem.wx78shieldingtime = nil
@@ -162,10 +173,21 @@ local function ClearWX78ShieldingDefense(inst)
 	end
 end
 
+local function IsSkillActivated(wx, skill)
+	local skilltreeupdater = wx.components.skilltreeupdater
+    if skilltreeupdater == nil and wx.components.follower ~= nil then
+        local leader = wx.components.follower:GetLeader()
+        skilltreeupdater = leader and leader.components.skilltreeupdater
+    end
+    return skilltreeupdater and skilltreeupdater:IsActivated(skill)
+end
+
+local WX78_SPIN_KEY = "wx78_spin"
+
 SGWX78Common.AddWX78SpinStates = function(states)
     table.insert(states, State{
         name = "wx_spin_start",
-		tags = { "prespin", "working", "busy" },
+		tags = { "prespin", "working", "busy", "jumping" },
 
         onenter = function(inst)
             inst.components.locomotor:Stop()
@@ -173,8 +195,7 @@ SGWX78Common.AddWX78SpinStates = function(states)
 
             --V2C: HACK so the first loop doesn't skip a frame
             inst.AnimState:PushAnimation(
-                inst.components.skilltreeupdater and
-                inst.components.skilltreeupdater:IsActivated("wx78_circuitry_gammabuffs_2") and
+                IsSkillActivated(inst, "wx78_circuitry_gammabuffs_2") and
                 "wx_spin_attack_loop" or
                 "wx_spin_attack_loop_slow")
 
@@ -263,12 +284,11 @@ SGWX78Common.AddWX78SpinStates = function(states)
 
     table.insert(states, State{
 		name = "wx_spin",
-		tags = { "busy", "prespin", "spinning", "working", "nopredict", "overridelocomote" },
+		tags = { "busy", "prespin", "spinning", "working", "nopredict", "overridelocomote", "jumping" },
 
 		onenter = function(inst, data)
 			local anim =
-				inst.components.skilltreeupdater and
-				inst.components.skilltreeupdater:IsActivated("wx78_circuitry_gammabuffs_2") and
+				IsSkillActivated(inst, "wx78_circuitry_gammabuffs_2") and
 				"wx_spin_attack_loop" or
 				"wx_spin_attack_loop_slow"
 
@@ -291,7 +311,7 @@ SGWX78Common.AddWX78SpinStates = function(states)
             if inst.isplayer then
 			    inst.sg.statemem.target = buffaction and buffaction.action == ACTIONS.ATTACK and buffaction.target or nil
             else
-			    inst.sg.statemem.target = buffaction and buffaction.target or nil
+			    inst.sg.statemem.target = buffaction and buffaction.target or inst.components.combat.target or nil
             end
 
 			if data then
@@ -388,7 +408,7 @@ SGWX78Common.AddWX78SpinStates = function(states)
 								PlayMiningFX(inst, v)
 								local eff = inst.sg.statemem.efficiency.MINE
 								if eff and inst.components.efficientuser then
-									inst.components.efficientuser:AddMultiplier(ACTIONS.MINE, eff, inst)
+									inst.components.efficientuser:AddMultiplier(ACTIONS.MINE, eff, inst, WX78_SPIN_KEY)
 								end
 								if BufferedAction(inst, v, ACTIONS.REMOVELUNARBUILDUP, item):Do() then
 									table.insert(actiondata, { action = ACTIONS.REMOVELUNARBUILDUP, target = v })
@@ -404,7 +424,7 @@ SGWX78Common.AddWX78SpinStates = function(states)
 									if canchop then
 										local eff = inst.sg.statemem.efficiency.CHOP
 										if eff and inst.components.efficientuser then
-											inst.components.efficientuser:AddMultiplier(ACTIONS.CHOP, eff, inst)
+											inst.components.efficientuser:AddMultiplier(ACTIONS.CHOP, eff, inst, WX78_SPIN_KEY)
 										end
 										if BufferedAction(inst, v, ACTIONS.CHOP, item):Do() then
 											table.insert(actiondata, { action = ACTIONS.CHOP, target = v })
@@ -422,7 +442,7 @@ SGWX78Common.AddWX78SpinStates = function(states)
 									if canmine then
 										local eff = inst.sg.statemem.efficiency.MINE
 										if eff and inst.components.efficientuser then
-											inst.components.efficientuser:AddMultiplier(ACTIONS.MINE, eff, inst)
+											inst.components.efficientuser:AddMultiplier(ACTIONS.MINE, eff, inst, WX78_SPIN_KEY)
 										end
 										if BufferedAction(inst, v, ACTIONS.MINE, item):Do() then
 											table.insert(actiondata, { action = ACTIONS.MINE, target = v })
@@ -461,12 +481,16 @@ SGWX78Common.AddWX78SpinStates = function(states)
 							then
 								local eff = inst.sg.statemem.efficiency.ATTACK
 								if inst.components.efficientuser then
-									inst.components.efficientuser:AddMultiplier(ACTIONS.ATTACK, eff, inst)
+									inst.components.efficientuser:AddMultiplier(ACTIONS.ATTACK, eff, inst, WX78_SPIN_KEY)
 								end
 								local dim = inst.sg.statemem.dim
 								if dim and inst.components.aoediminishingreturns then
 									--NOTE: this is not for dmg, but for any unique weapon behaviour that would make sense to scale the same as usage efficiency
-									inst.components.aoediminishingreturns.mult:SetModifier(inst, dim, "wx_spin")
+									inst.components.aoediminishingreturns.mult:SetModifier(inst, dim, WX78_SPIN_KEY)
+								end
+								if not didattack then
+									inst.components.combat:SetTarget(v)
+									inst.components.combat:StartAttack()
 								end
 								inst.components.combat:DoAttack(v)
 								table.insert(actiondata, { action = ACTIONS.ATTACK, target = v })
@@ -484,7 +508,7 @@ SGWX78Common.AddWX78SpinStates = function(states)
 								v.components.pickable.caninteractwith and
 								v.components.pickable:CanBePicked() and
 								not v.components.pickable:IsStuck() and
-								v:HasAnyTag(WX_SPIN_PICKABLE_TAGS)
+								v:HasAnyTag(HARVESTABLE_PLANT_TARGET_TAGS)
 							then
 								if v.components.pickable.picksound then
 									inst.SoundEmitter:PlaySound(v.components.pickable.picksound)
@@ -523,13 +547,13 @@ SGWX78Common.AddWX78SpinStates = function(states)
 				inst.components.combat.ignorehitrange = false
 
 				if inst.components.efficientuser then
-					inst.components.efficientuser:RemoveMultiplier(ACTIONS.CHOP, inst)
-					inst.components.efficientuser:RemoveMultiplier(ACTIONS.MINE, inst)
-					inst.components.efficientuser:RemoveMultiplier(ACTIONS.ATTACK, inst)
+					inst.components.efficientuser:RemoveMultiplier(ACTIONS.CHOP, inst, WX78_SPIN_KEY)
+					inst.components.efficientuser:RemoveMultiplier(ACTIONS.MINE, inst, WX78_SPIN_KEY)
+					inst.components.efficientuser:RemoveMultiplier(ACTIONS.ATTACK, inst, WX78_SPIN_KEY)
 				end
 
 				if inst.components.aoediminishingreturns then
-					inst.components.aoediminishingreturns.mult:RemoveModifier(inst, "wx_spin")
+					inst.components.aoediminishingreturns.mult:RemoveModifier(inst, WX78_SPIN_KEY)
 				end
 
 				if (didwork or didattack) then
@@ -537,7 +561,7 @@ SGWX78Common.AddWX78SpinStates = function(states)
 				end
 
 				if #actiondata > 0 then
-					inst:PushEvent("ms_wx_spinactions", actiondata)
+					inst:PushEvent("ms_wx_actiondata", actiondata)
 				end
 
 				if recoiltarget and inst.sg.currentstate.name == "wx_spin" then
@@ -593,6 +617,9 @@ SGWX78Common.AddWX78SpinStates = function(states)
 
 			local dizzytime = inst.CalcMaxDizzy and inst:CalcMaxDizzy() or TUNING.WX78_SPIN_TIME_TO_DIZZY
 			if inst.sg.mem.wx_spin_buildup > dizzytime then
+				if inst.sg.statemem.vx then
+					inst.Transform:SetRotation(math.atan2(-inst.sg.statemem.vz, inst.sg.statemem.vx) * RADIANS)
+				end
 				inst.sg:GoToState("wx_spin_dizzy")
 				return
 			end
@@ -796,6 +823,7 @@ SGWX78Common.AddWX78SpinStates = function(states)
 					inst.components.talker:StopIgnoringAll("spinning")
 				end
 			end
+			inst.components.combat:SetTarget(nil)
 		end,
 	})
 
@@ -964,8 +992,7 @@ SGWX78Common.AddWX78ScreechStates = function(states)
         tags = { "doing", "busy" },
 
         onenter = function(inst)
-            local timeout = not (inst.components.skilltreeupdater
-                and inst.components.skilltreeupdater:IsActivated("wx78_circuitry_gammabuffs_1"))
+            local timeout = (not IsSkillActivated(inst, "wx78_circuitry_gammabuffs_1"))
                 and (TUNING.WX78_SCREECH_TIME + math.random() * TUNING.WX78_SCREECH_TIME_VAR)
                 or nil
             inst.sg.statemem.timeout = timeout
@@ -1014,7 +1041,7 @@ SGWX78Common.AddWX78ScreechStates = function(states)
                 inst.SoundEmitter:PlaySound("WX_rework/screech/loop", "wx_screech")
             end
             -- TheMixer:PushMix("wx_screech") -- TODO
-            inst.sg.statemem.scarecd = FRAMES * 2
+            inst.sg.statemem.scarecd = 0
 
             if timeout ~= nil then
                 inst.sg:SetTimeout(timeout)
@@ -1040,7 +1067,7 @@ SGWX78Common.AddWX78ScreechStates = function(states)
             -- TheMixer:PopMix("wx_screech") -- TODO 
 
 			if inst.sg.statemem.shouldcooldown and inst.components.wx78_abilitycooldowns then
-				inst.components.wx78_abilitycooldowns:RestartAbilityCooldown("wxscreech", TUNING.WX78_SCREECH_COOLDOWN)
+				inst.components.wx78_abilitycooldowns:RestartAbilityCooldown("screech", TUNING.WX78_SCREECH_COOLDOWN)
 			end
         end,
     })
@@ -1109,6 +1136,278 @@ SGWX78Common.AddWX78BakeState = function(states)
             inst.SoundEmitter:KillSound("wx_baking")
         end,
     })
+end
+
+SGWX78Common.AddWX78UseDroneStates = function(states)
+	table.insert(states, State{
+		name = "wx_start_using_drone",
+		tags = { "doing", "busy" },
+
+		onenter = function(inst)
+			local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+			if not (item and item:HasTag("wx_remotecontroller")) then
+				inst:ClearBufferedAction()
+				inst.sg:GoToState("idle")
+				return
+			end
+			inst:AddTag("using_drone_remote")
+			inst:PushEvent("ms_wx_clearactiondata")
+			inst.sg.statemem.item = item
+			inst.sg.statemem.buffaction = inst.bufferedaction
+			inst.components.locomotor:Stop()
+			inst.AnimState:PlayAnimation("drone_zap_remote_use_pre")
+			if inst.components.playercontroller then
+				inst.components.playercontroller:EnableMapControls(false)
+			end
+			--inst.components.inventory:Hide() --can't do now or action will fail
+			inst:PushEvent("ms_closepopups")
+			if inst.ShowActions then
+				inst:ShowActions(false)
+			end
+		end,
+
+		timeline =
+		{
+			FrameEvent(8, function(inst)
+				inst.sg.statemem.buffaction = nil
+				if inst:PerformBufferedAction() then
+					inst.sg.statemem.using_drone = true
+					inst.sg:GoToState("wx_using_drone", inst.sg.statemem.item)
+				else
+					inst.sg.statemem.item = nil
+					inst.sg:GoToState("wx_stop_using_drone")
+				end
+			end),
+		},
+
+		events =
+		{
+			EventHandler("equip", function(inst) inst.sg:GoToState("idle") end),
+			EventHandler("unequip", function(inst, data)
+				if not (data and data.item == inst.sg.statemem.item) then
+					inst.sg:GoToState("idle")
+				end
+			end),
+		},
+
+		onexit = function(inst)
+			if inst.bufferedaction == inst.sg.statemem.buffaction then
+				inst:ClearBufferedAction()
+			end
+			if not inst.sg.statemem.using_drone then
+				inst:RemoveTag("using_drone_remote")
+				if inst.components.playercontroller then
+					inst.components.playercontroller:EnableMapControls(true)
+				end
+				--inst.components.inventory:Show() --didn't hide during this state
+				if inst.ShowActions then
+					inst:ShowActions(true)
+				end
+
+				local item = inst.sg.statemem.item
+				if item and item:IsValid() and item.components.useableequippeditem then
+					item.components.useableequippeditem:StopUsingItem(inst)
+				end
+			end
+		end,
+	})
+
+	table.insert(states, State{
+		name = "wx_using_drone",
+		tags = { "doing", "overridelocomote", "nodragwalk", "overrideattack" },
+
+		onenter = function(inst, item)
+			if inst.AnimState:IsCurrentAnimation("drone_zap_remote_use_pre") then
+				inst.AnimState:PushAnimation("drone_zap_remote_use_loop")
+			else
+				inst.AnimState:PlayAnimation("drone_zap_remote_use_loop", true)
+			end
+
+			if inst.components.playercontroller then
+				inst.components.playercontroller:SetIsOverrideAttack(true)
+				inst.components.playercontroller:EnableMapControls(false)
+			end
+			inst:AddTag("using_drone_remote")
+			inst.sg.statemem.item = item
+			inst:PushEvent("ms_closepopups")
+			inst.components.inventory:Hide()
+			if inst.ShowActions then
+				inst:ShowActions(false)
+			end
+			if inst.SetCameraZoomed then
+				inst:SetCameraZoomed(true)
+			end
+			if inst.SetAerialCamera then
+				inst:SetAerialCamera(true)
+			end
+		end,
+
+		onupdate = function(inst)
+			local item = inst.sg.statemem.item
+			if not (
+				item and item:IsValid() and
+				item.components.equippable and item.components.equippable:IsEquipped() and
+				item.components.inventoryitem and (
+					not item.components.inventoryitem:IsHeld() or
+					item.components.inventoryitem:GetGrandOwner() == inst
+				)
+			) then
+				inst.sg:GoToState("item_in")
+				return
+			elseif not (item.components.useableequippeditem and item.components.useableequippeditem:IsInUse()) then
+				inst.sg.statemem.item = nil
+				inst.sg:GoToState("wx_stop_using_drone")
+				return
+			elseif not (item.drone and not item.drone.killed and item.drone:IsValid()) then
+				if item.components.useableequippeditem then
+					item.components.useableequippeditem:StopUsingItem(inst)
+				end
+				inst.sg.statemem.item = nil
+				inst.sg:GoToState("wx_stop_using_drone")
+				return
+			elseif inst.components.playercontroller then
+				if inst.sg.statemem.canrepeatfire then
+					if item.components.finiteuses and
+						item.components.finiteuses:GetUses() > 0 and
+						inst.components.playercontroller and
+						inst.components.playercontroller:IsAnyOfControlsPressed(CONTROL_ATTACK, CONTROL_CONTROLLER_ATTACK)
+					then
+						item.drone:PushEventImmediate("doattack")
+					end
+					if not item.drone.sg:HasStateTag("attack") then
+						inst.sg.statemem.canrepeatfire = false
+					end
+				end
+			else --non-player logic
+				local target = inst.components.combat.target
+				if target == nil or
+					inst.components.locomotor:WantsToMoveForward() or
+					not (item.components.finiteuses and item.components.finiteuses:GetUses() > 0)
+				then
+					if item.drone.sg:HasStateTag("idle") and GetTime() >= (inst.sg.statemem.busytime or 0) then
+						if item.components.useableequippeditem then
+							item.components.useableequippeditem:StopUsingItem(inst)
+						end
+						inst.sg.statemem.item = nil
+						inst.sg:GoToState("wx_stop_using_drone")
+						return
+					elseif item.drone.sg:HasStateTag("moving") then
+						item.drone:PushEventImmediate("locomote")
+					end
+				else
+					local x, _, z = item.drone.Transform:GetWorldPosition()
+					local x1, _, z1 = target.Transform:GetWorldPosition()
+					local dx = x1 - x
+					local dz = z1 - z
+					local dsq = dx * dx + dz * dz
+					if dsq >= 4 then
+						local dir = math.atan2(-dz, dx) * RADIANS
+						item.drone:PushEventImmediate("locomote", { dir = dir })
+						if item.drone.sg:HasStateTag("moving") then
+							inst.sg.statemem.busytime = math.max(inst.sg.statemem.busytime or 0, GetTime() + 0.5)
+						end
+					elseif dsq >= 1 then
+						if item.drone.sg:HasStateTag("moving") then
+							item.drone:PushEventImmediate("locomote")
+						end
+					elseif not item.drone.sg:HasStateTag("busy") then
+						if inst.sg.statemem.queuedattack then
+							inst.sg.statemem.queuedattack = false
+							item.drone:PushEventImmediate("doattack")
+							if item.drone.sg:HasStateTag("attack") then
+								inst.sg.statemem.busytime = math.max(inst.sg.statemem.busytime or 0, GetTime() + 2)
+							end
+						end
+					end
+				end
+			end
+		end,
+
+		events =
+		{
+			EventHandler("equip", function(inst) inst.sg:GoToState("idle") end),
+			EventHandler("unequip", function(inst, data)
+				if not (data and data.item == inst.sg.statemem.item) then
+					inst.sg:GoToState("idle")
+				end
+			end),
+			EventHandler("locomote", function(inst, data)
+				--direct movement only, no drag or point destination.
+				if inst.components.playercontroller and not inst.components.locomotor:HasDestination() then
+					local drone = inst.sg.statemem.item and inst.sg.statemem.item.drone
+					if drone and not drone.killed and drone:IsValid() then
+						drone:PushEventImmediate("locomote", data)
+					end
+				end
+				return true
+			end),
+			EventHandler("attackbutton", function(inst)
+				local item = inst.sg.statemem.item
+				if item and
+					item.drone and
+					not item.drone.killed and
+					item.drone:IsValid() and
+					not (item.components.finiteuses and item.components.finiteuses:GetUses() <= 0)
+				then
+					item.drone:PushEventImmediate("doattack")
+					if item.drone.sg:HasStateTag("attack") then
+						inst.sg.statemem.canrepeatfire = true
+					end
+				end
+			end),
+			EventHandler("ms_wx_clone_use_drone_zap_attack", function(inst, data)
+				inst.sg.statemem.queuedattack = data and data.doattack
+			end),
+		},
+
+		onexit = function(inst)
+			if inst.components.playercontroller then
+				inst.components.playercontroller:SetIsOverrideAttack(false)
+				inst.components.playercontroller:EnableMapControls(true)
+			end
+			inst:RemoveTag("using_drone_remote")
+			inst:PushEvent("ms_wx_clearactiondata")
+			inst.components.inventory:Show()
+			if inst.ShowActions then
+				inst:ShowActions(true)
+			end
+			if inst.SetCameraZoomed then
+				inst:SetCameraZoomed(false)
+			end
+			if inst.SetAerialCamera then
+				inst:SetAerialCamera(false)
+			end
+
+			local item = inst.sg.statemem.item
+			if item and item:IsValid() and item.components.useableequippeditem then
+				item.components.useableequippeditem:StopUsingItem(inst)
+			end
+		end,
+	})
+
+	table.insert(states, State{
+		name = "wx_stop_using_drone",
+		tags = { "doing", "busy" },
+
+		onenter = function(inst)
+			inst.components.locomotor:Stop()
+			inst.AnimState:PlayAnimation("drone_zap_remote_use_pst")
+			inst.sg:SetTimeout(6 * FRAMES)
+		end,
+
+		ontimeout = function(inst)
+			inst.sg:RemoveStateTag("busy")
+		end,
+
+		events =
+		{
+			EventHandler("animover", function(inst)
+				if inst.AnimState:AnimDone() then
+					inst.sg:GoToState("idle")
+				end
+			end),
+		},
+	})
 end
 
 return SGWX78Common
